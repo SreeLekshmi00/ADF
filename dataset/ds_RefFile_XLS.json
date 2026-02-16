@@ -1,0 +1,68 @@
+{
+	"name": "ds_RefFile_XLS",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_Ref_IF_Copy",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Excel",
+		"typeProperties": {
+			"sheetName": "CompTrans",
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "CompTrans.xls",
+				"folderPath": "ref",
+				"fileSystem": "adlscontainer"
+			}
+		},
+		"schema": [
+			{
+				"type": "String"
+			},
+			{
+				"type": "String"
+			},
+			{
+				"type": "String"
+			},
+			{
+				"type": "String"
+			},
+			{
+				"type": "String"
+			},
+			{
+				"type": "String"
+			},
+			{
+				"type": "String"
+			},
+			{
+				"type": "String"
+			},
+			{
+				"type": "String"
+			},
+			{
+				"type": "String"
+			},
+			{
+				"type": "String"
+			},
+			{
+				"type": "String"
+			},
+			{
+				"type": "String"
+			},
+			{
+				"type": "String"
+			},
+			{
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

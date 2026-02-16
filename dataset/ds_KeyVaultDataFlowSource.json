@@ -1,0 +1,33 @@
+{
+	"name": "ds_KeyVaultDataFlowSource",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_ADLS",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"DF_TableName": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": {
+					"value": "@dataset().DF_TableName",
+					"type": "Expression"
+				},
+				"folderPath": "KeyVaultTryALL",
+				"fileSystem": "adlscontainer"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

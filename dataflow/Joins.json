@@ -1,0 +1,99 @@
+{
+	"name": "Joins",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_JoinInput",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_Join2Input",
+						"type": "DatasetReference"
+					},
+					"name": "source2"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ds_JoinOutput",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "join1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          ID as integer,",
+				"          FIRST_NAME as string,",
+				"          LAST_NAME as string,",
+				"          MEMBER_ID as string,",
+				"          APPOINTMENT_DESCRIPTION as string,",
+				"          APPOINTMENT_ID as integer,",
+				"          AGE as integer,",
+				"          APPOINTMENT_DATE as string,",
+				"          Gender as string,",
+				"          TREATMENT_AMOUNT as integer",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source1",
+				"source(output(",
+				"          ID as integer,",
+				"          FIRST_NAME as string,",
+				"          LAST_NAME as string,",
+				"          MEMBER_ID as integer,",
+				"          APPOINTMENT_DESCRIPTION as string,",
+				"          APPOINTMENT_ID as integer,",
+				"          AGE as integer,",
+				"          APPOINTMENT_DATE as string,",
+				"          Gender as string,",
+				"          TREATMENT_AMOUNT as integer",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source2",
+				"source1, source2 join(source1@APPOINTMENT_ID == source2@APPOINTMENT_ID,",
+				"     joinType:'inner',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join1",
+				"join1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          column_a as string,",
+				"          trans_id as string,",
+				"          account_id as string,",
+				"          type as string,",
+				"          operation as string,",
+				"          amount as string,",
+				"          balance as string,",
+				"          symbol as string,",
+				"          bank as string,",
+				"          account as string,",
+				"          year as string,",
+				"          month as string,",
+				"          day as string,",
+				"          fulldate as string,",
+				"          fulltime as string",
+				"     ),",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sink1"
+			]
+		}
+	}
+}

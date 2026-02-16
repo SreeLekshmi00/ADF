@@ -1,0 +1,43 @@
+{
+	"name": "ds_ParquetInput",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_ADLS",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "employee_data_windows.parquet",
+				"folderPath": "input",
+				"fileSystem": "adlscontainer"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": [
+			{
+				"name": "Department_ID",
+				"type": "UTF8"
+			},
+			{
+				"name": "Department_Name",
+				"type": "UTF8"
+			},
+			{
+				"name": "Employee_ID",
+				"type": "UTF8"
+			},
+			{
+				"name": "Name",
+				"type": "UTF8"
+			},
+			{
+				"name": "Salary",
+				"type": "UTF8"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

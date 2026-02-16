@@ -1,0 +1,25 @@
+{
+	"name": "ds_KeyVaultCopyFromOnPrem",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_KeyVaultCopyFromOnPrem",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"CopyTableName": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": {
+				"value": "@dataset().CopyTableName",
+				"type": "Expression"
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

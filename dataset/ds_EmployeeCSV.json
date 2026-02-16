@@ -1,0 +1,46 @@
+{
+	"name": "ds_EmployeeCSV",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_ADLS",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "employee_data_windows.csv",
+				"folderPath": "input",
+				"fileSystem": "adlscontainer"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "Department_ID",
+				"type": "String"
+			},
+			{
+				"name": "Department_Name",
+				"type": "String"
+			},
+			{
+				"name": "Employee_ID",
+				"type": "String"
+			},
+			{
+				"name": "Name",
+				"type": "String"
+			},
+			{
+				"name": "Salary",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

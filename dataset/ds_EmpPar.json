@@ -1,0 +1,21 @@
+{
+	"name": "ds_EmpPar",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_EmpPar",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "output",
+				"fileSystem": "adlscontainer"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

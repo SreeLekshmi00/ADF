@@ -1,0 +1,40 @@
+{
+	"name": "ds_JsonInput",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_ADLS",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "employee_data_windows.json",
+				"folderPath": "input",
+				"fileSystem": "adlscontainer"
+			}
+		},
+		"schema": {
+			"type": "object",
+			"properties": {
+				"Department_ID": {
+					"type": "string"
+				},
+				"Department_Name": {
+					"type": "string"
+				},
+				"Employee_ID": {
+					"type": "string"
+				},
+				"Name": {
+					"type": "string"
+				},
+				"Salary": {
+					"type": "string"
+				}
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

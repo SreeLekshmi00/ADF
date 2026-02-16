@@ -1,0 +1,31 @@
+{
+	"name": "ls_keyvault_onprem",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "SqlServer",
+		"typeProperties": {
+			"server": "FALCON",
+			"database": "LearnSQL",
+			"encrypt": "mandatory",
+			"trustServerCertificate": true,
+			"authenticationType": "SQL",
+			"userName": "Sree",
+			"password": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "AzureKeyVault1",
+					"type": "LinkedServiceReference"
+				},
+				"secretName": "SQLServerSree"
+			},
+			"alwaysEncryptedSettings": {
+				"alwaysEncryptedAkvAuthType": "ManagedIdentity"
+			}
+		},
+		"connectVia": {
+			"referenceName": "IROnPrem",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}

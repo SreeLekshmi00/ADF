@@ -1,0 +1,9 @@
+{
+	"name": "Training2026ADF",
+	"location": "uksouth",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "b895fce0-a8b5-4482-914c-757b049ada88",
+		"tenantId": "5eb6ca58-dd63-48ce-b482-3bf4e6157624"
+	}
+}

@@ -1,0 +1,44 @@
+{
+	"name": "ds_ExcelInput",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_ADLS",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Excel",
+		"typeProperties": {
+			"sheetName": "TransactionsData",
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "Analyst_Example_Task.xlsx",
+				"folderPath": "input",
+				"fileSystem": "adlscontainer"
+			},
+			"firstRowAsHeader": true
+		},
+		"schema": [
+			{
+				"name": "Regions",
+				"type": "String"
+			},
+			{
+				"name": "Mar",
+				"type": "String"
+			},
+			{
+				"name": "Apr",
+				"type": "String"
+			},
+			{
+				"name": "May",
+				"type": "String"
+			},
+			{
+				"name": "Jun",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

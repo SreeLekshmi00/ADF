@@ -1,0 +1,94 @@
+{
+	"name": "ds_keyvaultADLSFiles",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_KeyVaultNewFile2DF",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"FinalTName": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": {
+					"value": "@dataset().FinalTName",
+					"type": "Expression"
+				},
+				"folderPath": "KeyVaultTryALL",
+				"fileSystem": "adlscontainer"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "column_a",
+				"type": "String"
+			},
+			{
+				"name": "trans_id",
+				"type": "String"
+			},
+			{
+				"name": "account_id",
+				"type": "String"
+			},
+			{
+				"name": "type",
+				"type": "String"
+			},
+			{
+				"name": "operation",
+				"type": "String"
+			},
+			{
+				"name": "amount",
+				"type": "String"
+			},
+			{
+				"name": "balance",
+				"type": "String"
+			},
+			{
+				"name": "symbol",
+				"type": "String"
+			},
+			{
+				"name": "bank",
+				"type": "String"
+			},
+			{
+				"name": "account",
+				"type": "String"
+			},
+			{
+				"name": "year",
+				"type": "String"
+			},
+			{
+				"name": "month",
+				"type": "String"
+			},
+			{
+				"name": "day",
+				"type": "String"
+			},
+			{
+				"name": "fulldate",
+				"type": "String"
+			},
+			{
+				"name": "fulltime",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
