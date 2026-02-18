@@ -1,0 +1,16 @@
+{
+	"name": "ds_ADLS2SQLTable",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_ADLS2SQLTable",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "CompTest"
+		}
+	}
+}

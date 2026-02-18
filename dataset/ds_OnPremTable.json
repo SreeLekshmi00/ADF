@@ -1,0 +1,16 @@
+{
+	"name": "ds_OnPremTable",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_OnPremTable",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "CompTrans"
+		}
+	}
+}
