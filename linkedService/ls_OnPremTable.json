@@ -9,18 +9,19 @@
 			"encrypt": "mandatory",
 			"trustServerCertificate": true,
 			"authenticationType": "SQL",
-			"userName": "Sree",
+			"userName": "Niran",
 			"password": {
 				"type": "AzureKeyVaultSecret",
 				"store": {
 					"referenceName": "AzureKeyVault1",
 					"type": "LinkedServiceReference"
 				},
-				"secretName": "SQLServerSree"
-			},
-			"alwaysEncryptedSettings": {
-				"alwaysEncryptedAkvAuthType": "ManagedIdentity"
+				"secretName": "SQLServerKeyNiran"
 			}
+		},
+		"connectVia": {
+			"referenceName": "IROnPrem",
+			"type": "IntegrationRuntimeReference"
 		}
 	}
 }
