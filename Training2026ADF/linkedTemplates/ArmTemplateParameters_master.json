@@ -1,0 +1,156 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "Training2026ADF"
+		},
+		"AzureDataLakeStorage1_accountKey": {
+			"value": ""
+		},
+		"ls_ADLS_accountKey": {
+			"value": ""
+		},
+		"ls_ADLS2DB_accountKey": {
+			"value": ""
+		},
+		"ls_ADLS2SQLTable_password": {
+			"value": ""
+		},
+		"ls_EmpPar_accountKey": {
+			"value": ""
+		},
+		"ls_KeyVaultNewFile2DF_accountKey": {
+			"value": ""
+		},
+		"ls_OnPrem2ADLS_accountKey": {
+			"value": ""
+		},
+		"ls_OnPremLookUp_password": {
+			"value": ""
+		},
+		"ls_OnPremSQLServer_password": {
+			"value": ""
+		},
+		"ls_OnPrem_Dyn_TName_password": {
+			"value": ""
+		},
+		"ls_Ref_IF_Copy_accountKey": {
+			"value": ""
+		},
+		"AzureDataLakeStorage1_properties_typeProperties_url": {
+			"value": "https://azadlsstorageaccount.dfs.core.windows.net/"
+		},
+		"AzureKeyVault1_properties_typeProperties_baseUrl": {
+			"value": "https://KeyValut00.vault.azure.net/"
+		},
+		"ls_ADLS_properties_typeProperties_url": {
+			"value": "https://azadlsstorageaccount.dfs.core.windows.net/"
+		},
+		"ls_ADLS2DB_properties_typeProperties_url": {
+			"value": "https://azadlsstorageaccount.dfs.core.windows.net/"
+		},
+		"ls_ADLS2SQLTable_properties_typeProperties_server": {
+			"value": "az-falcon.database.windows.net"
+		},
+		"ls_ADLS2SQLTable_properties_typeProperties_database": {
+			"value": "DailyBackUp"
+		},
+		"ls_ADLS2SQLTable_properties_typeProperties_userName": {
+			"value": "Niran"
+		},
+		"ls_EmpPar_properties_typeProperties_url": {
+			"value": "https://azadlsstorageaccount.dfs.core.windows.net/"
+		},
+		"ls_KeyVaultCopyFromOnPrem_properties_typeProperties_server": {
+			"value": "FALCON"
+		},
+		"ls_KeyVaultCopyFromOnPrem_properties_typeProperties_database": {
+			"value": "LearnSQL"
+		},
+		"ls_KeyVaultCopyFromOnPrem_properties_typeProperties_userName": {
+			"value": "Sree"
+		},
+		"ls_KeyVaultGetMeta_properties_typeProperties_server": {
+			"value": "FALCON"
+		},
+		"ls_KeyVaultGetMeta_properties_typeProperties_database": {
+			"value": "LearnSQL"
+		},
+		"ls_KeyVaultGetMeta_properties_typeProperties_userName": {
+			"value": "Sree"
+		},
+		"ls_KeyVaultNewFile2DF_properties_typeProperties_url": {
+			"value": "https://azadlsstorageaccount.dfs.core.windows.net/"
+		},
+		"ls_OnPrem2ADLS_properties_typeProperties_url": {
+			"value": "https://azadlsstorageaccount.dfs.core.windows.net/"
+		},
+		"ls_OnPremLookUp_properties_typeProperties_server": {
+			"value": "FALCON"
+		},
+		"ls_OnPremLookUp_properties_typeProperties_database": {
+			"value": "LearnSQL"
+		},
+		"ls_OnPremLookUp_properties_typeProperties_userName": {
+			"value": "Sree"
+		},
+		"ls_OnPremSQL2DB_properties_typeProperties_server": {
+			"value": "FALCON"
+		},
+		"ls_OnPremSQL2DB_properties_typeProperties_database": {
+			"value": "LearnSQL"
+		},
+		"ls_OnPremSQL2DB_properties_typeProperties_userName": {
+			"value": "Sree"
+		},
+		"ls_OnPremSQLServer_properties_typeProperties_server": {
+			"value": "FALCON"
+		},
+		"ls_OnPremSQLServer_properties_typeProperties_database": {
+			"value": "LearnSQL"
+		},
+		"ls_OnPremSQLServer_properties_typeProperties_userName": {
+			"value": "Sree"
+		},
+		"ls_OnPremTable_properties_typeProperties_server": {
+			"value": "FALCON"
+		},
+		"ls_OnPremTable_properties_typeProperties_database": {
+			"value": "LearnSQL"
+		},
+		"ls_OnPremTable_properties_typeProperties_userName": {
+			"value": "Niran"
+		},
+		"ls_OnPrem_Dyn_TName_properties_typeProperties_server": {
+			"value": "FALCON"
+		},
+		"ls_OnPrem_Dyn_TName_properties_typeProperties_database": {
+			"value": "LearnSQL"
+		},
+		"ls_OnPrem_Dyn_TName_properties_typeProperties_userName": {
+			"value": "Niran"
+		},
+		"ls_Ref_IF_Copy_properties_typeProperties_url": {
+			"value": "https://azadlsstorageaccount.dfs.core.windows.net/"
+		},
+		"ls_adb_csv_properties_typeProperties_existingClusterId": {
+			"value": "0209-025758-ausnyyzo"
+		},
+		"ls_keyvault_onprem_properties_typeProperties_server": {
+			"value": "FALCON"
+		},
+		"ls_keyvault_onprem_properties_typeProperties_database": {
+			"value": "LearnSQL"
+		},
+		"ls_keyvault_onprem_properties_typeProperties_userName": {
+			"value": "Sree"
+		},
+		"containerUri": {
+			"value": ""
+		},
+		"containerSasToken": {
+			"value": ""
+		}
+	}
+}
