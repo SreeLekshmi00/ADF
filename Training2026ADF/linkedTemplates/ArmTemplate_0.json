@@ -19,10 +19,6 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'ls_ADLS2DB'"
 		},
-		"ls_ADLS2SQLTable_password": {
-			"type": "secureString",
-			"metadata": "Secure string for 'password' of 'ls_ADLS2SQLTable'"
-		},
 		"ls_EmpPar_accountKey": {
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'ls_EmpPar'"
@@ -47,6 +43,10 @@
 			"type": "string",
 			"defaultValue": "https://KeyValut00.vault.azure.net/"
 		},
+		"AzureKeyVault2_properties_typeProperties_baseUrl": {
+			"type": "string",
+			"defaultValue": "https://AzSQLKey.vault.azure.net/"
+		},
 		"ls_ADLS_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://azadlsstorageaccount.dfs.core.windows.net/"
@@ -54,18 +54,6 @@
 		"ls_ADLS2DB_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://azadlsstorageaccount.dfs.core.windows.net/"
-		},
-		"ls_ADLS2SQLTable_properties_typeProperties_server": {
-			"type": "string",
-			"defaultValue": "az-falcon.database.windows.net"
-		},
-		"ls_ADLS2SQLTable_properties_typeProperties_database": {
-			"type": "string",
-			"defaultValue": "DailyBackUp"
-		},
-		"ls_ADLS2SQLTable_properties_typeProperties_userName": {
-			"type": "string",
-			"defaultValue": "Niran"
 		},
 		"ls_EmpPar_properties_typeProperties_url": {
 			"type": "string",
@@ -119,6 +107,19 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/AzureKeyVault2')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureKeyVault",
+				"typeProperties": {
+					"baseUrl": "[parameters('AzureKeyVault2_properties_typeProperties_baseUrl')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/ls_ADLS')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
@@ -147,28 +148,6 @@
 					"accountKey": {
 						"type": "SecureString",
 						"value": "[parameters('ls_ADLS2DB_accountKey')]"
-					}
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/ls_ADLS2SQLTable')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureSqlDatabase",
-				"typeProperties": {
-					"server": "[parameters('ls_ADLS2SQLTable_properties_typeProperties_server')]",
-					"database": "[parameters('ls_ADLS2SQLTable_properties_typeProperties_database')]",
-					"encrypt": "mandatory",
-					"trustServerCertificate": true,
-					"authenticationType": "SQL",
-					"userName": "[parameters('ls_ADLS2SQLTable_properties_typeProperties_userName')]",
-					"password": {
-						"type": "SecureString",
-						"value": "[parameters('ls_ADLS2SQLTable_password')]"
 					}
 				}
 			},
@@ -414,27 +393,6 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/ls_ADLS2DB')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/ds_ADLS2SQLTable')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "ls_ADLS2SQLTable",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [],
-				"typeProperties": {
-					"schema": "dbo",
-					"table": "CompTest"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/ls_ADLS2SQLTable')]"
 			]
 		},
 		{
@@ -787,6 +745,31 @@
 						"type": "String"
 					}
 				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_EmpPar')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_JSON')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_EmpPar",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "employee_data_windows.json",
+						"folderPath": "output",
+						"fileSystem": "adlscontainer"
+					}
+				},
+				"schema": {}
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/ls_EmpPar')]"

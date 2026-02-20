@@ -23,6 +23,18 @@
 			"type": "string",
 			"defaultValue": "Niran"
 		},
+		"ls_TempTable_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "historical.database.windows.net"
+		},
+		"ls_TempTable_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "TempData"
+		},
+		"ls_TempTable_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "Niran"
+		},
 		"ls_adb_csv_properties_typeProperties_existingClusterId": {
 			"type": "string",
 			"defaultValue": "0209-025758-ausnyyzo"
@@ -38,6 +50,18 @@
 		"ls_keyvault_onprem_properties_typeProperties_userName": {
 			"type": "string",
 			"defaultValue": "Sree"
+		},
+		"ls_onPremSQLOLTPTable_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "FALCON"
+		},
+		"ls_onPremSQLOLTPTable_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "LearnSQL"
+		},
+		"ls_onPremSQLOLTPTable_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "Niran"
 		}
 	},
 	"variables": {
@@ -66,6 +90,35 @@
 				"connectVia": {
 					"referenceName": "IROnPrem",
 					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ls_TempTable')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDatabase",
+				"typeProperties": {
+					"server": "[parameters('ls_TempTable_properties_typeProperties_server')]",
+					"database": "[parameters('ls_TempTable_properties_typeProperties_database')]",
+					"encrypt": "mandatory",
+					"trustServerCertificate": true,
+					"authenticationType": "SQL",
+					"userName": "[parameters('ls_TempTable_properties_typeProperties_userName')]",
+					"password": {
+						"type": "AzureKeyVaultSecret",
+						"store": {
+							"referenceName": "AzureKeyVault2",
+							"type": "LinkedServiceReference"
+						},
+						"secretName": "NiranSQLKey"
+					},
+					"alwaysEncryptedSettings": {
+						"alwaysEncryptedAkvAuthType": "ManagedIdentity"
+					}
 				}
 			},
 			"dependsOn": []
@@ -113,6 +166,39 @@
 							"type": "LinkedServiceReference"
 						},
 						"secretName": "SQLServerSree"
+					},
+					"alwaysEncryptedSettings": {
+						"alwaysEncryptedAkvAuthType": "ManagedIdentity"
+					}
+				},
+				"connectVia": {
+					"referenceName": "IROnPrem",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ls_onPremSQLOLTPTable')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "SqlServer",
+				"typeProperties": {
+					"server": "[parameters('ls_onPremSQLOLTPTable_properties_typeProperties_server')]",
+					"database": "[parameters('ls_onPremSQLOLTPTable_properties_typeProperties_database')]",
+					"encrypt": "mandatory",
+					"trustServerCertificate": true,
+					"authenticationType": "SQL",
+					"userName": "[parameters('ls_onPremSQLOLTPTable_properties_typeProperties_userName')]",
+					"password": {
+						"type": "AzureKeyVaultSecret",
+						"store": {
+							"referenceName": "AzureKeyVault1",
+							"type": "LinkedServiceReference"
+						},
+						"secretName": "SQLServerKeyNiran"
 					},
 					"alwaysEncryptedSettings": {
 						"alwaysEncryptedAkvAuthType": "ManagedIdentity"
@@ -755,6 +841,25 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/ds_ADLS2SQLTable')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_ADLS2SQLTable",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "CompTest"
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/ds_KeyVaultCopyFromOnPrem')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -955,316 +1060,88 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/ds_keyvault_onprem')]",
+			"name": "[concat(parameters('factoryName'), '/ds_TempTable')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "ls_keyvault_onprem",
+					"referenceName": "ls_TempTable",
 					"type": "LinkedServiceReference"
 				},
 				"annotations": [],
-				"type": "SqlServerTable",
-				"schema": [],
-				"typeProperties": {}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/ls_keyvault_onprem')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/Joins')]",
-			"type": "Microsoft.DataFactory/factories/dataflows",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"type": "MappingDataFlow",
-				"typeProperties": {
-					"sources": [
-						{
-							"dataset": {
-								"referenceName": "ds_JoinInput",
-								"type": "DatasetReference"
-							},
-							"name": "source1"
-						},
-						{
-							"dataset": {
-								"referenceName": "ds_Join2Input",
-								"type": "DatasetReference"
-							},
-							"name": "source2"
-						}
-					],
-					"sinks": [
-						{
-							"dataset": {
-								"referenceName": "ds_JoinOutput",
-								"type": "DatasetReference"
-							},
-							"name": "sink1"
-						}
-					],
-					"transformations": [
-						{
-							"name": "join1"
-						}
-					],
-					"scriptLines": [
-						"source(output(",
-						"          ID as integer,",
-						"          FIRST_NAME as string,",
-						"          LAST_NAME as string,",
-						"          MEMBER_ID as string,",
-						"          APPOINTMENT_DESCRIPTION as string,",
-						"          APPOINTMENT_ID as integer,",
-						"          AGE as integer,",
-						"          APPOINTMENT_DATE as string,",
-						"          Gender as string,",
-						"          TREATMENT_AMOUNT as integer",
-						"     ),",
-						"     allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     ignoreNoFilesFound: false) ~> source1",
-						"source(output(",
-						"          ID as integer,",
-						"          FIRST_NAME as string,",
-						"          LAST_NAME as string,",
-						"          MEMBER_ID as integer,",
-						"          APPOINTMENT_DESCRIPTION as string,",
-						"          APPOINTMENT_ID as integer,",
-						"          AGE as integer,",
-						"          APPOINTMENT_DATE as string,",
-						"          Gender as string,",
-						"          TREATMENT_AMOUNT as integer",
-						"     ),",
-						"     allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     ignoreNoFilesFound: false) ~> source2",
-						"source1, source2 join(source1@APPOINTMENT_ID == source2@APPOINTMENT_ID,",
-						"     joinType:'inner',",
-						"     matchType:'exact',",
-						"     ignoreSpaces: false,",
-						"     broadcast: 'auto')~> join1",
-						"join1 sink(allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     input(",
-						"          column_a as string,",
-						"          trans_id as string,",
-						"          account_id as string,",
-						"          type as string,",
-						"          operation as string,",
-						"          amount as string,",
-						"          balance as string,",
-						"          symbol as string,",
-						"          bank as string,",
-						"          account as string,",
-						"          year as string,",
-						"          month as string,",
-						"          day as string,",
-						"          fulldate as string,",
-						"          fulltime as string",
-						"     ),",
-						"     umask: 0022,",
-						"     preCommands: [],",
-						"     postCommands: [],",
-						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true) ~> sink1"
-					]
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/KeyVaultTryAll')]",
-			"type": "Microsoft.DataFactory/factories/dataflows",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"type": "MappingDataFlow",
-				"typeProperties": {
-					"sources": [
-						{
-							"dataset": {
-								"referenceName": "ds_keyvaultADLSFiles",
-								"type": "DatasetReference"
-							},
-							"name": "OnPremSQL2ADLSFile"
-						}
-					],
-					"sinks": [
-						{
-							"dataset": {
-								"referenceName": "ds_JoinOutput",
-								"type": "DatasetReference"
-							},
-							"name": "sink1"
-						},
-						{
-							"dataset": {
-								"referenceName": "ds_JoinOutput",
-								"type": "DatasetReference"
-							},
-							"name": "sink2"
-						}
-					],
-					"transformations": [
-						{
-							"name": "split1"
-						},
-						{
-							"name": "aggregate1"
-						},
-						{
-							"name": "filter1"
-						}
-					],
-					"scriptLines": [
-						"source(output(",
-						"          column_a as integer,",
-						"          trans_id as string,",
-						"          account_id as string,",
-						"          type as string,",
-						"          operation as string,",
-						"          amount as float,",
-						"          balance as float,",
-						"          symbol as string,",
-						"          bank as string,",
-						"          account as string,",
-						"          year as string,",
-						"          month as string,",
-						"          day as string,",
-						"          fulldate as date,",
-						"          fulltime as date",
-						"     ),",
-						"     allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     ignoreNoFilesFound: false) ~> OnPremSQL2ADLSFile",
-						"OnPremSQL2ADLSFile split(column_a <100,",
-						"     disjoint: false) ~> split1@(NewTable1, NewTable2)",
-						"split1@NewTable2 aggregate(groupBy(fulldate),",
-						"     amount = sum(amount)) ~> aggregate1",
-						"split1@NewTable1 filter(amount>5000) ~> filter1",
-						"filter1 sink(allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     input(",
-						"          column_a as string,",
-						"          trans_id as string,",
-						"          account_id as string,",
-						"          type as string,",
-						"          operation as string,",
-						"          amount as string,",
-						"          balance as string,",
-						"          symbol as string,",
-						"          bank as string,",
-						"          account as string,",
-						"          year as string,",
-						"          month as string,",
-						"          day as string,",
-						"          fulldate as string,",
-						"          fulltime as string",
-						"     ),",
-						"     umask: 0022,",
-						"     preCommands: [],",
-						"     postCommands: [],",
-						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true) ~> sink1",
-						"aggregate1 sink(allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     input(",
-						"          column_a as string,",
-						"          trans_id as string,",
-						"          account_id as string,",
-						"          type as string,",
-						"          operation as string,",
-						"          amount as string,",
-						"          balance as string,",
-						"          symbol as string,",
-						"          bank as string,",
-						"          account as string,",
-						"          year as string,",
-						"          month as string,",
-						"          day as string,",
-						"          fulldate as string,",
-						"          fulltime as string",
-						"     ),",
-						"     umask: 0022,",
-						"     preCommands: [],",
-						"     postCommands: [],",
-						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true) ~> sink2"
-					]
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/C4_OnPremSQL2ADLS')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
+				"type": "AzureSqlTable",
+				"schema": [
 					{
-						"name": "Table2ADLS",
-						"type": "Copy",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "SqlServerSource",
-								"queryTimeout": "02:00:00",
-								"partitionOption": "None"
-							},
-							"sink": {
-								"type": "DelimitedTextSink",
-								"storeSettings": {
-									"type": "AzureBlobFSWriteSettings"
-								},
-								"formatSettings": {
-									"type": "DelimitedTextWriteSettings",
-									"quoteAllText": true,
-									"fileExtension": ".txt"
-								}
-							},
-							"enableStaging": false,
-							"translator": {
-								"type": "TabularTranslator",
-								"typeConversion": true,
-								"typeConversionSettings": {
-									"allowDataTruncation": true,
-									"treatBooleanAsNumber": false
-								}
-							}
-						},
-						"inputs": [
-							{
-								"referenceName": "ds_OnPremSQLServer_1Table",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						],
-						"outputs": [
-							{
-								"referenceName": "ds_OnPremTable2CSV",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						]
+						"name": "Order_Number",
+						"type": "bigint",
+						"precision": 19
+					},
+					{
+						"name": "Customer_Key",
+						"type": "bigint",
+						"precision": 19
+					},
+					{
+						"name": "Order_Sequence_No",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "Channel",
+						"type": "varchar"
+					},
+					{
+						"name": "Order_Date",
+						"type": "varchar"
+					},
+					{
+						"name": "Hour_of_Day",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "Region",
+						"type": "varchar"
+					},
+					{
+						"name": "Brand_Key",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "Category",
+						"type": "varchar"
+					},
+					{
+						"name": "Units",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "RRP_Revenue",
+						"type": "decimal",
+						"precision": 10,
+						"scale": 2
+					},
+					{
+						"name": "Revenue",
+						"type": "decimal",
+						"precision": 10,
+						"scale": 2
+					},
+					{
+						"name": "Total_Discount",
+						"type": "int",
+						"precision": 10
 					}
 				],
-				"policy": {
-					"elapsedTimeMetric": {}
-				},
-				"annotations": [],
-				"lastPublishTime": "2026-02-01T02:37:27Z"
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "TransactionsDataOLAP"
+				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/ds_OnPremSQLServer_1Table')]"
+				"[concat(variables('factoryId'), '/linkedServices/ls_TempTable')]"
 			]
 		}
 	]

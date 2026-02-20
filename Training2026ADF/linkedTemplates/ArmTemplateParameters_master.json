@@ -14,9 +14,6 @@
 		"ls_ADLS2DB_accountKey": {
 			"value": ""
 		},
-		"ls_ADLS2SQLTable_password": {
-			"value": ""
-		},
 		"ls_EmpPar_accountKey": {
 			"value": ""
 		},
@@ -44,6 +41,9 @@
 		"AzureKeyVault1_properties_typeProperties_baseUrl": {
 			"value": "https://KeyValut00.vault.azure.net/"
 		},
+		"AzureKeyVault2_properties_typeProperties_baseUrl": {
+			"value": "https://AzSQLKey.vault.azure.net/"
+		},
 		"ls_ADLS_properties_typeProperties_url": {
 			"value": "https://azadlsstorageaccount.dfs.core.windows.net/"
 		},
@@ -51,10 +51,10 @@
 			"value": "https://azadlsstorageaccount.dfs.core.windows.net/"
 		},
 		"ls_ADLS2SQLTable_properties_typeProperties_server": {
-			"value": "az-falcon.database.windows.net"
+			"value": "historical.database.windows.net"
 		},
 		"ls_ADLS2SQLTable_properties_typeProperties_database": {
-			"value": "DailyBackUp"
+			"value": "TempData"
 		},
 		"ls_ADLS2SQLTable_properties_typeProperties_userName": {
 			"value": "Niran"
@@ -134,6 +134,15 @@
 		"ls_Ref_IF_Copy_properties_typeProperties_url": {
 			"value": "https://azadlsstorageaccount.dfs.core.windows.net/"
 		},
+		"ls_TempTable_properties_typeProperties_server": {
+			"value": "historical.database.windows.net"
+		},
+		"ls_TempTable_properties_typeProperties_database": {
+			"value": "TempData"
+		},
+		"ls_TempTable_properties_typeProperties_userName": {
+			"value": "Niran"
+		},
 		"ls_adb_csv_properties_typeProperties_existingClusterId": {
 			"value": "0209-025758-ausnyyzo"
 		},
@@ -145,6 +154,15 @@
 		},
 		"ls_keyvault_onprem_properties_typeProperties_userName": {
 			"value": "Sree"
+		},
+		"ls_onPremSQLOLTPTable_properties_typeProperties_server": {
+			"value": "FALCON"
+		},
+		"ls_onPremSQLOLTPTable_properties_typeProperties_database": {
+			"value": "LearnSQL"
+		},
+		"ls_onPremSQLOLTPTable_properties_typeProperties_userName": {
+			"value": "Niran"
 		},
 		"containerUri": {
 			"value": ""

@@ -19,10 +19,6 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'ls_ADLS2DB'"
 		},
-		"ls_ADLS2SQLTable_password": {
-			"type": "secureString",
-			"metadata": "Secure string for 'password' of 'ls_ADLS2SQLTable'"
-		},
 		"ls_EmpPar_accountKey": {
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'ls_EmpPar'"
@@ -59,6 +55,10 @@
 			"type": "string",
 			"defaultValue": "https://KeyValut00.vault.azure.net/"
 		},
+		"AzureKeyVault2_properties_typeProperties_baseUrl": {
+			"type": "string",
+			"defaultValue": "https://AzSQLKey.vault.azure.net/"
+		},
 		"ls_ADLS_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://azadlsstorageaccount.dfs.core.windows.net/"
@@ -69,11 +69,11 @@
 		},
 		"ls_ADLS2SQLTable_properties_typeProperties_server": {
 			"type": "string",
-			"defaultValue": "az-falcon.database.windows.net"
+			"defaultValue": "historical.database.windows.net"
 		},
 		"ls_ADLS2SQLTable_properties_typeProperties_database": {
 			"type": "string",
-			"defaultValue": "DailyBackUp"
+			"defaultValue": "TempData"
 		},
 		"ls_ADLS2SQLTable_properties_typeProperties_userName": {
 			"type": "string",
@@ -179,6 +179,18 @@
 			"type": "string",
 			"defaultValue": "https://azadlsstorageaccount.dfs.core.windows.net/"
 		},
+		"ls_TempTable_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "historical.database.windows.net"
+		},
+		"ls_TempTable_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "TempData"
+		},
+		"ls_TempTable_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "Niran"
+		},
 		"ls_adb_csv_properties_typeProperties_existingClusterId": {
 			"type": "string",
 			"defaultValue": "0209-025758-ausnyyzo"
@@ -194,12 +206,237 @@
 		"ls_keyvault_onprem_properties_typeProperties_userName": {
 			"type": "string",
 			"defaultValue": "Sree"
+		},
+		"ls_onPremSQLOLTPTable_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "FALCON"
+		},
+		"ls_onPremSQLOLTPTable_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "LearnSQL"
+		},
+		"ls_onPremSQLOLTPTable_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "Niran"
 		}
 	},
 	"variables": {
 		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
 	},
 	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/ADF_Project3IncrementalRefresh')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "GetInput_MetaData",
+						"type": "GetMetadata",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataset": {
+								"referenceName": "ds_OnPrem_Dy_TName",
+								"type": "DatasetReference",
+								"parameters": {
+									"TableName": {
+										"value": "@pipeline().parameters.TableName",
+										"type": "Expression"
+									}
+								}
+							},
+							"fieldList": [
+								"exists",
+								"structure",
+								"columnCount"
+							]
+						}
+					},
+					{
+						"name": "If File Exists",
+						"type": "IfCondition",
+						"dependsOn": [
+							{
+								"activity": "GetInput_MetaData",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"expression": {
+								"value": "@activity('GetInput_MetaData').output.exists",
+								"type": "Expression"
+							},
+							"ifFalseActivities": [
+								{
+									"name": "Wait1",
+									"type": "Wait",
+									"dependsOn": [],
+									"userProperties": [],
+									"typeProperties": {
+										"waitTimeInSeconds": 5
+									}
+								}
+							]
+						}
+					},
+					{
+						"name": "If Same Schema",
+						"type": "IfCondition",
+						"dependsOn": [
+							{
+								"activity": "If File Exists",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							},
+							{
+								"activity": "Get Reference_Metadata",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"expression": {
+								"value": "@equals(activity('Get Reference_Metadata').output.columnCount,activity('GetInput_MetaData').output.columnCount)",
+								"type": "Expression"
+							},
+							"ifFalseActivities": [
+								{
+									"name": "Wait2",
+									"type": "Wait",
+									"dependsOn": [],
+									"userProperties": [],
+									"typeProperties": {
+										"waitTimeInSeconds": 5
+									}
+								}
+							],
+							"ifTrueActivities": [
+								{
+									"name": "Copy data1",
+									"type": "Copy",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "0.12:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"source": {
+											"type": "SqlServerSource",
+											"queryTimeout": "02:00:00",
+											"partitionOption": "None"
+										},
+										"sink": {
+											"type": "AzureSqlSink",
+											"writeBehavior": "upsert",
+											"upsertSettings": {
+												"useTempDB": true,
+												"keys": [
+													"Order_Number"
+												]
+											},
+											"sqlWriterUseTableLock": false,
+											"disableMetricsCollection": false
+										},
+										"enableStaging": false,
+										"translator": {
+											"type": "TabularTranslator",
+											"typeConversion": true,
+											"typeConversionSettings": {
+												"allowDataTruncation": true,
+												"treatBooleanAsNumber": false
+											}
+										}
+									},
+									"inputs": [
+										{
+											"referenceName": "ds_onPremSQLOLTPTable",
+											"type": "DatasetReference",
+											"parameters": {
+												"TableName": "@pipeline().parameters.TableName"
+											}
+										}
+									],
+									"outputs": [
+										{
+											"referenceName": "ds_TempTable",
+											"type": "DatasetReference",
+											"parameters": {}
+										}
+									]
+								}
+							]
+						}
+					},
+					{
+						"name": "Get Reference_Metadata",
+						"type": "GetMetadata",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataset": {
+								"referenceName": "ds_RefFile_CSV",
+								"type": "DatasetReference",
+								"parameters": {}
+							},
+							"fieldList": [
+								"columnCount",
+								"itemName",
+								"structure"
+							],
+							"storeSettings": {
+								"type": "AzureBlobStorageReadSettings",
+								"recursive": true,
+								"enablePartitionDiscovery": false
+							},
+							"formatSettings": {
+								"type": "DelimitedTextReadSettings"
+							}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"parameters": {
+					"TableName": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"lastPublishTime": "2026-02-01T03:44:58Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ds_OnPrem_Dy_TName')]",
+				"[concat(variables('factoryId'), '/datasets/ds_RefFile_CSV')]",
+				"[concat(variables('factoryId'), '/datasets/ds_onPremSQLOLTPTable')]",
+				"[concat(variables('factoryId'), '/datasets/ds_TempTable')]"
+			]
+		},
 		{
 			"name": "[concat(parameters('factoryName'), '/C1_ReadADLS2ADLS')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
@@ -1390,6 +1627,105 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/IncrementalRefresh')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy data1",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "SqlServerSource",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"sink": {
+								"type": "AzureSqlSink",
+								"writeBehavior": "upsert",
+								"upsertSettings": {
+									"useTempDB": true,
+									"keys": [
+										"Order_Number"
+									]
+								},
+								"sqlWriterUseTableLock": false,
+								"disableMetricsCollection": false
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "ds_onPremSQLOLTPTable",
+								"type": "DatasetReference",
+								"parameters": {
+									"TableName": {
+										"value": "@pipeline().parameters.TableName",
+										"type": "Expression"
+									}
+								}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "ds_TempTable",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					},
+					{
+						"name": "WaitFor5",
+						"type": "Wait",
+						"dependsOn": [
+							{
+								"activity": "Copy data1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"waitTimeInSeconds": 5
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"parameters": {
+					"TableName": {
+						"type": "string",
+						"defaultValue": "TransactionsDataOLTP"
+					}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ds_onPremSQLOLTPTable')]",
+				"[concat(variables('factoryId'), '/datasets/ds_TempTable')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/L1_BackUp')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -1745,7 +2081,7 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/OnPrem2AzSQL')]",
+			"name": "[concat(parameters('factoryName'), '/P1_OnPrem2AzSQL')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -3474,6 +3810,91 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/ds_TempTable')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_TempTable",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "Order_Number",
+						"type": "bigint",
+						"precision": 19
+					},
+					{
+						"name": "Customer_Key",
+						"type": "bigint",
+						"precision": 19
+					},
+					{
+						"name": "Order_Sequence_No",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "Channel",
+						"type": "varchar"
+					},
+					{
+						"name": "Order_Date",
+						"type": "varchar"
+					},
+					{
+						"name": "Hour_of_Day",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "Region",
+						"type": "varchar"
+					},
+					{
+						"name": "Brand_Key",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "Category",
+						"type": "varchar"
+					},
+					{
+						"name": "Units",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "RRP_Revenue",
+						"type": "decimal",
+						"precision": 10,
+						"scale": 2
+					},
+					{
+						"name": "Revenue",
+						"type": "decimal",
+						"precision": 10,
+						"scale": 2
+					},
+					{
+						"name": "Total_Discount",
+						"type": "int",
+						"precision": 10
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "TransactionsDataOLAP"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_TempTable')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/ds_keyvaultADLSFiles')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -3590,6 +4011,97 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/ds_onPremSQLOLTPTable')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_onPremSQLOLTPTable",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"TableName": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "SqlServerTable",
+				"schema": [
+					{
+						"name": "Order_Number",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "Customer_Key",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "Order_Sequence_No",
+						"type": "tinyint",
+						"precision": 3
+					},
+					{
+						"name": "Channel",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Order_Date",
+						"type": "date"
+					},
+					{
+						"name": "Hour_of_Day",
+						"type": "tinyint",
+						"precision": 3
+					},
+					{
+						"name": "Region",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Brand_Key",
+						"type": "smallint",
+						"precision": 5
+					},
+					{
+						"name": "Category",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Units",
+						"type": "tinyint",
+						"precision": 3
+					},
+					{
+						"name": "RRP_Revenue",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "Revenue",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "Total_Discount",
+						"type": "float",
+						"precision": 15
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": {
+						"value": "@dataset().TableName",
+						"type": "Expression"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_onPremSQLOLTPTable')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/AzureDataLakeStorage1')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
@@ -3615,6 +4127,19 @@
 				"type": "AzureKeyVault",
 				"typeProperties": {
 					"baseUrl": "[parameters('AzureKeyVault1_properties_typeProperties_baseUrl')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureKeyVault2')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureKeyVault",
+				"typeProperties": {
+					"baseUrl": "[parameters('AzureKeyVault2_properties_typeProperties_baseUrl')]"
 				}
 			},
 			"dependsOn": []
@@ -3668,12 +4193,21 @@
 					"authenticationType": "SQL",
 					"userName": "[parameters('ls_ADLS2SQLTable_properties_typeProperties_userName')]",
 					"password": {
-						"type": "SecureString",
-						"value": "[parameters('ls_ADLS2SQLTable_password')]"
+						"type": "AzureKeyVaultSecret",
+						"store": {
+							"referenceName": "AzureKeyVault2",
+							"type": "LinkedServiceReference"
+						},
+						"secretName": "NiranSQLKey"
+					},
+					"alwaysEncryptedSettings": {
+						"alwaysEncryptedAkvAuthType": "ManagedIdentity"
 					}
 				}
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureKeyVault2')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/ls_EmpPar')]",
@@ -3966,6 +4500,37 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/ls_TempTable')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDatabase",
+				"typeProperties": {
+					"server": "[parameters('ls_TempTable_properties_typeProperties_server')]",
+					"database": "[parameters('ls_TempTable_properties_typeProperties_database')]",
+					"encrypt": "mandatory",
+					"trustServerCertificate": true,
+					"authenticationType": "SQL",
+					"userName": "[parameters('ls_TempTable_properties_typeProperties_userName')]",
+					"password": {
+						"type": "AzureKeyVaultSecret",
+						"store": {
+							"referenceName": "AzureKeyVault2",
+							"type": "LinkedServiceReference"
+						},
+						"secretName": "NiranSQLKey"
+					},
+					"alwaysEncryptedSettings": {
+						"alwaysEncryptedAkvAuthType": "ManagedIdentity"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureKeyVault2')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/ls_adb_csv')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
@@ -4010,6 +4575,42 @@
 							"type": "LinkedServiceReference"
 						},
 						"secretName": "SQLServerSree"
+					},
+					"alwaysEncryptedSettings": {
+						"alwaysEncryptedAkvAuthType": "ManagedIdentity"
+					}
+				},
+				"connectVia": {
+					"referenceName": "IROnPrem",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/integrationRuntimes/IROnPrem')]",
+				"[concat(variables('factoryId'), '/linkedServices/AzureKeyVault1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ls_onPremSQLOLTPTable')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "SqlServer",
+				"typeProperties": {
+					"server": "[parameters('ls_onPremSQLOLTPTable_properties_typeProperties_server')]",
+					"database": "[parameters('ls_onPremSQLOLTPTable_properties_typeProperties_database')]",
+					"encrypt": "mandatory",
+					"trustServerCertificate": true,
+					"authenticationType": "SQL",
+					"userName": "[parameters('ls_onPremSQLOLTPTable_properties_typeProperties_userName')]",
+					"password": {
+						"type": "AzureKeyVaultSecret",
+						"store": {
+							"referenceName": "AzureKeyVault1",
+							"type": "LinkedServiceReference"
+						},
+						"secretName": "SQLServerKeyNiran"
 					},
 					"alwaysEncryptedSettings": {
 						"alwaysEncryptedAkvAuthType": "ManagedIdentity"
