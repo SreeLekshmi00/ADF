@@ -255,8 +255,7 @@
 							},
 							"fieldList": [
 								"exists",
-								"structure",
-								"columnCount"
+								"structure"
 							]
 						}
 					},
@@ -285,6 +284,23 @@
 									"userProperties": [],
 									"typeProperties": {
 										"waitTimeInSeconds": 5
+									}
+								},
+								{
+									"name": "No file found",
+									"type": "Fail",
+									"dependsOn": [
+										{
+											"activity": "Wait1",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"userProperties": [],
+									"typeProperties": {
+										"message": "No file found",
+										"errorCode": "Retry"
 									}
 								}
 							]
@@ -409,7 +425,7 @@
 								"structure"
 							],
 							"storeSettings": {
-								"type": "AzureBlobStorageReadSettings",
+								"type": "AzureBlobFSReadSettings",
 								"recursive": true,
 								"enablePartitionDiscovery": false
 							},
@@ -3661,7 +3677,7 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobFSLocation",
-						"fileName": "CompTrans.csv",
+						"fileName": "TransactionsDataOLAP.csv",
 						"folderPath": "ref",
 						"fileSystem": "adlscontainer"
 					},

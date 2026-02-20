@@ -750,7 +750,7 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobFSLocation",
-						"fileName": "CompTrans.csv",
+						"fileName": "TransactionsDataOLAP.csv",
 						"folderPath": "ref",
 						"fileSystem": "adlscontainer"
 					},
