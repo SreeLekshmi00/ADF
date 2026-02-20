@@ -1,5 +1,5 @@
 {
-	"name": "OnPrem2AzSQL",
+	"name": "P1_OnPrem2AzSQL",
 	"properties": {
 		"activities": [
 			{

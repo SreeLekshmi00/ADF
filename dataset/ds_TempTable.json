@@ -1,0 +1,80 @@
+{
+	"name": "ds_TempTable",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_TempTable",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "Order_Number",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "Customer_Key",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "Order_Sequence_No",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "Channel",
+				"type": "varchar"
+			},
+			{
+				"name": "Order_Date",
+				"type": "varchar"
+			},
+			{
+				"name": "Hour_of_Day",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "Region",
+				"type": "varchar"
+			},
+			{
+				"name": "Brand_Key",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "Category",
+				"type": "varchar"
+			},
+			{
+				"name": "Units",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "RRP_Revenue",
+				"type": "decimal",
+				"precision": 10,
+				"scale": 2
+			},
+			{
+				"name": "Revenue",
+				"type": "decimal",
+				"precision": 10,
+				"scale": 2
+			},
+			{
+				"name": "Total_Discount",
+				"type": "int",
+				"precision": 10
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "TransactionsDataOLAP"
+		}
+	}
+}
