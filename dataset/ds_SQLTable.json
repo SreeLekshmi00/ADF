@@ -1,0 +1,78 @@
+{
+	"name": "ds_SQLTable",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_SQLTable",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "Order_Number",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "Customer_Key",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "Order_Sequence_No",
+				"type": "tinyint",
+				"precision": 3
+			},
+			{
+				"name": "Channel",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Order_Date",
+				"type": "date"
+			},
+			{
+				"name": "Hour_of_Day",
+				"type": "tinyint",
+				"precision": 3
+			},
+			{
+				"name": "Region",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Brand_Key",
+				"type": "smallint",
+				"precision": 5
+			},
+			{
+				"name": "Category",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Units",
+				"type": "tinyint",
+				"precision": 3
+			},
+			{
+				"name": "RRP_Revenue",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Revenue",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Total_Discount",
+				"type": "float",
+				"precision": 15
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "TransactionsDataOLAP"
+		}
+	}
+}

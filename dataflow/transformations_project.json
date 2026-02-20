@@ -1,0 +1,84 @@
+{
+	"name": "transformations_project",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_SQLTable",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ds_TransformedData",
+						"type": "DatasetReference"
+					},
+					"name": "TransformedData"
+				}
+			],
+			"transformations": [
+				{
+					"name": "SelectWanted"
+				},
+				{
+					"name": "UKData"
+				},
+				{
+					"name": "ArrangeOnDiscount"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          Order_Number as integer,",
+				"          Customer_Key as integer,",
+				"          Order_Sequence_No as integer,",
+				"          Channel as string,",
+				"          Order_Date as date,",
+				"          Hour_of_Day as integer,",
+				"          Region as string,",
+				"          Brand_Key as integer,",
+				"          Category as string,",
+				"          Units as integer,",
+				"          RRP_Revenue as double,",
+				"          Revenue as double,",
+				"          Total_Discount as double",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> source1",
+				"source1 select(mapColumn(",
+				"          Order_Number,",
+				"          Customer_Key,",
+				"          Order_Sequence_No,",
+				"          Channel,",
+				"          Order_Date,",
+				"          Hour_of_Day,",
+				"          Region,",
+				"          Brand_Key,",
+				"          Category,",
+				"          Units,",
+				"          RRP_Revenue,",
+				"          Revenue,",
+				"          Total_Discount",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> SelectWanted",
+				"SelectWanted filter(Region == 'UK' && Total_Discount > 0) ~> UKData",
+				"UKData sort(asc(Total_Discount, true)) ~> ArrangeOnDiscount",
+				"ArrangeOnDiscount sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> TransformedData"
+			]
+		}
+	}
+}
