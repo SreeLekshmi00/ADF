@@ -11,6 +11,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'AzureDataLakeStorage1'"
 		},
+		"ds_TransformedData_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'ds_TransformedData'"
+		},
 		"ls_ADLS_accountKey": {
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'ls_ADLS'"
@@ -58,6 +62,10 @@
 		"AzureKeyVault2_properties_typeProperties_baseUrl": {
 			"type": "string",
 			"defaultValue": "https://AzSQLKey.vault.azure.net/"
+		},
+		"ds_TransformedData_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://azadlsstorageaccount.dfs.core.windows.net/"
 		},
 		"ls_ADLS_properties_typeProperties_url": {
 			"type": "string",
@@ -179,6 +187,18 @@
 			"type": "string",
 			"defaultValue": "https://azadlsstorageaccount.dfs.core.windows.net/"
 		},
+		"ls_SQLTable_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "historical.database.windows.net"
+		},
+		"ls_SQLTable_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "TempData"
+		},
+		"ls_SQLTable_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "Niran"
+		},
 		"ls_TempTable_properties_typeProperties_server": {
 			"type": "string",
 			"defaultValue": "historical.database.windows.net"
@@ -249,6 +269,9 @@
 					"AzureDataLakeStorage1_accountKey": {
 						"value": "[parameters('AzureDataLakeStorage1_accountKey')]"
 					},
+					"ds_TransformedData_accountKey": {
+						"value": "[parameters('ds_TransformedData_accountKey')]"
+					},
 					"ls_ADLS_accountKey": {
 						"value": "[parameters('ls_ADLS_accountKey')]"
 					},
@@ -275,6 +298,9 @@
 					},
 					"AzureKeyVault2_properties_typeProperties_baseUrl": {
 						"value": "[parameters('AzureKeyVault2_properties_typeProperties_baseUrl')]"
+					},
+					"ds_TransformedData_properties_typeProperties_url": {
+						"value": "[parameters('ds_TransformedData_properties_typeProperties_url')]"
 					},
 					"ls_ADLS_properties_typeProperties_url": {
 						"value": "[parameters('ls_ADLS_properties_typeProperties_url')]"
@@ -314,9 +340,6 @@
 					},
 					"ls_OnPremLookUp_password": {
 						"value": "[parameters('ls_OnPremLookUp_password')]"
-					},
-					"ls_OnPremSQLServer_password": {
-						"value": "[parameters('ls_OnPremSQLServer_password')]"
 					},
 					"ls_ADLS2SQLTable_properties_typeProperties_server": {
 						"value": "[parameters('ls_ADLS2SQLTable_properties_typeProperties_server')]"
@@ -362,24 +385,6 @@
 					},
 					"ls_OnPremSQL2DB_properties_typeProperties_userName": {
 						"value": "[parameters('ls_OnPremSQL2DB_properties_typeProperties_userName')]"
-					},
-					"ls_OnPremSQLServer_properties_typeProperties_server": {
-						"value": "[parameters('ls_OnPremSQLServer_properties_typeProperties_server')]"
-					},
-					"ls_OnPremSQLServer_properties_typeProperties_database": {
-						"value": "[parameters('ls_OnPremSQLServer_properties_typeProperties_database')]"
-					},
-					"ls_OnPremSQLServer_properties_typeProperties_userName": {
-						"value": "[parameters('ls_OnPremSQLServer_properties_typeProperties_userName')]"
-					},
-					"ls_OnPremTable_properties_typeProperties_server": {
-						"value": "[parameters('ls_OnPremTable_properties_typeProperties_server')]"
-					},
-					"ls_OnPremTable_properties_typeProperties_database": {
-						"value": "[parameters('ls_OnPremTable_properties_typeProperties_database')]"
-					},
-					"ls_OnPremTable_properties_typeProperties_userName": {
-						"value": "[parameters('ls_OnPremTable_properties_typeProperties_userName')]"
 					}
 				}
 			},
@@ -401,8 +406,29 @@
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
 					},
+					"ls_OnPremSQLServer_password": {
+						"value": "[parameters('ls_OnPremSQLServer_password')]"
+					},
 					"ls_OnPrem_Dyn_TName_password": {
 						"value": "[parameters('ls_OnPrem_Dyn_TName_password')]"
+					},
+					"ls_OnPremSQLServer_properties_typeProperties_server": {
+						"value": "[parameters('ls_OnPremSQLServer_properties_typeProperties_server')]"
+					},
+					"ls_OnPremSQLServer_properties_typeProperties_database": {
+						"value": "[parameters('ls_OnPremSQLServer_properties_typeProperties_database')]"
+					},
+					"ls_OnPremSQLServer_properties_typeProperties_userName": {
+						"value": "[parameters('ls_OnPremSQLServer_properties_typeProperties_userName')]"
+					},
+					"ls_OnPremTable_properties_typeProperties_server": {
+						"value": "[parameters('ls_OnPremTable_properties_typeProperties_server')]"
+					},
+					"ls_OnPremTable_properties_typeProperties_database": {
+						"value": "[parameters('ls_OnPremTable_properties_typeProperties_database')]"
+					},
+					"ls_OnPremTable_properties_typeProperties_userName": {
+						"value": "[parameters('ls_OnPremTable_properties_typeProperties_userName')]"
 					},
 					"ls_OnPrem_Dyn_TName_properties_typeProperties_server": {
 						"value": "[parameters('ls_OnPrem_Dyn_TName_properties_typeProperties_server')]"
@@ -412,6 +438,15 @@
 					},
 					"ls_OnPrem_Dyn_TName_properties_typeProperties_userName": {
 						"value": "[parameters('ls_OnPrem_Dyn_TName_properties_typeProperties_userName')]"
+					},
+					"ls_SQLTable_properties_typeProperties_server": {
+						"value": "[parameters('ls_SQLTable_properties_typeProperties_server')]"
+					},
+					"ls_SQLTable_properties_typeProperties_database": {
+						"value": "[parameters('ls_SQLTable_properties_typeProperties_database')]"
+					},
+					"ls_SQLTable_properties_typeProperties_userName": {
+						"value": "[parameters('ls_SQLTable_properties_typeProperties_userName')]"
 					},
 					"ls_TempTable_properties_typeProperties_server": {
 						"value": "[parameters('ls_TempTable_properties_typeProperties_server')]"

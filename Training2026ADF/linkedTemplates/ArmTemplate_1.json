@@ -11,10 +11,6 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'password' of 'ls_OnPremLookUp'"
 		},
-		"ls_OnPremSQLServer_password": {
-			"type": "secureString",
-			"metadata": "Secure string for 'password' of 'ls_OnPremSQLServer'"
-		},
 		"ls_ADLS2SQLTable_properties_typeProperties_server": {
 			"type": "string",
 			"defaultValue": "historical.database.windows.net"
@@ -74,36 +70,35 @@
 		"ls_OnPremSQL2DB_properties_typeProperties_userName": {
 			"type": "string",
 			"defaultValue": "Sree"
-		},
-		"ls_OnPremSQLServer_properties_typeProperties_server": {
-			"type": "string",
-			"defaultValue": "FALCON"
-		},
-		"ls_OnPremSQLServer_properties_typeProperties_database": {
-			"type": "string",
-			"defaultValue": "LearnSQL"
-		},
-		"ls_OnPremSQLServer_properties_typeProperties_userName": {
-			"type": "string",
-			"defaultValue": "Sree"
-		},
-		"ls_OnPremTable_properties_typeProperties_server": {
-			"type": "string",
-			"defaultValue": "FALCON"
-		},
-		"ls_OnPremTable_properties_typeProperties_database": {
-			"type": "string",
-			"defaultValue": "LearnSQL"
-		},
-		"ls_OnPremTable_properties_typeProperties_userName": {
-			"type": "string",
-			"defaultValue": "Niran"
 		}
 	},
 	"variables": {
 		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
 	},
 	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_JSON')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_EmpPar",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "employee_data_windows.json",
+						"folderPath": "output",
+						"fileSystem": "adlscontainer"
+					}
+				},
+				"schema": {}
+			},
+			"dependsOn": []
+		},
 		{
 			"name": "[concat(parameters('factoryName'), '/ds_Join2Input')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
@@ -895,6 +890,33 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/ds_TransformedData')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ds_TransformedData",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "FinalData",
+						"folderPath": "TransformedData",
+						"fileSystem": "adlscontainer"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/ds_keyvaultADLSFiles')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -1132,62 +1154,6 @@
 							"type": "LinkedServiceReference"
 						},
 						"secretName": "SQLServerSree"
-					}
-				},
-				"connectVia": {
-					"referenceName": "IROnPrem",
-					"type": "IntegrationRuntimeReference"
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/ls_OnPremSQLServer')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "SqlServer",
-				"typeProperties": {
-					"server": "[parameters('ls_OnPremSQLServer_properties_typeProperties_server')]",
-					"database": "[parameters('ls_OnPremSQLServer_properties_typeProperties_database')]",
-					"encrypt": "mandatory",
-					"trustServerCertificate": true,
-					"authenticationType": "SQL",
-					"userName": "[parameters('ls_OnPremSQLServer_properties_typeProperties_userName')]",
-					"password": {
-						"type": "SecureString",
-						"value": "[parameters('ls_OnPremSQLServer_password')]"
-					}
-				},
-				"connectVia": {
-					"referenceName": "IROnPrem",
-					"type": "IntegrationRuntimeReference"
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/ls_OnPremTable')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "SqlServer",
-				"typeProperties": {
-					"server": "[parameters('ls_OnPremTable_properties_typeProperties_server')]",
-					"database": "[parameters('ls_OnPremTable_properties_typeProperties_database')]",
-					"encrypt": "mandatory",
-					"trustServerCertificate": true,
-					"authenticationType": "SQL",
-					"userName": "[parameters('ls_OnPremTable_properties_typeProperties_userName')]",
-					"password": {
-						"type": "AzureKeyVaultSecret",
-						"store": {
-							"referenceName": "AzureKeyVault1",
-							"type": "LinkedServiceReference"
-						},
-						"secretName": "SQLServerKeyNiran"
 					}
 				},
 				"connectVia": {

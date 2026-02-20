@@ -7,9 +7,37 @@
 			"metadata": "Data Factory name",
 			"defaultValue": "Training2026ADF"
 		},
+		"ls_OnPremSQLServer_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'ls_OnPremSQLServer'"
+		},
 		"ls_OnPrem_Dyn_TName_password": {
 			"type": "secureString",
 			"metadata": "Secure string for 'password' of 'ls_OnPrem_Dyn_TName'"
+		},
+		"ls_OnPremSQLServer_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "FALCON"
+		},
+		"ls_OnPremSQLServer_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "LearnSQL"
+		},
+		"ls_OnPremSQLServer_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "Sree"
+		},
+		"ls_OnPremTable_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "FALCON"
+		},
+		"ls_OnPremTable_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "LearnSQL"
+		},
+		"ls_OnPremTable_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "Niran"
 		},
 		"ls_OnPrem_Dyn_TName_properties_typeProperties_server": {
 			"type": "string",
@@ -20,6 +48,18 @@
 			"defaultValue": "LearnSQL"
 		},
 		"ls_OnPrem_Dyn_TName_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "Niran"
+		},
+		"ls_SQLTable_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "historical.database.windows.net"
+		},
+		"ls_SQLTable_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "TempData"
+		},
+		"ls_SQLTable_properties_typeProperties_userName": {
 			"type": "string",
 			"defaultValue": "Niran"
 		},
@@ -69,6 +109,62 @@
 	},
 	"resources": [
 		{
+			"name": "[concat(parameters('factoryName'), '/ls_OnPremSQLServer')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "SqlServer",
+				"typeProperties": {
+					"server": "[parameters('ls_OnPremSQLServer_properties_typeProperties_server')]",
+					"database": "[parameters('ls_OnPremSQLServer_properties_typeProperties_database')]",
+					"encrypt": "mandatory",
+					"trustServerCertificate": true,
+					"authenticationType": "SQL",
+					"userName": "[parameters('ls_OnPremSQLServer_properties_typeProperties_userName')]",
+					"password": {
+						"type": "SecureString",
+						"value": "[parameters('ls_OnPremSQLServer_password')]"
+					}
+				},
+				"connectVia": {
+					"referenceName": "IROnPrem",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ls_OnPremTable')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "SqlServer",
+				"typeProperties": {
+					"server": "[parameters('ls_OnPremTable_properties_typeProperties_server')]",
+					"database": "[parameters('ls_OnPremTable_properties_typeProperties_database')]",
+					"encrypt": "mandatory",
+					"trustServerCertificate": true,
+					"authenticationType": "SQL",
+					"userName": "[parameters('ls_OnPremTable_properties_typeProperties_userName')]",
+					"password": {
+						"type": "AzureKeyVaultSecret",
+						"store": {
+							"referenceName": "AzureKeyVault1",
+							"type": "LinkedServiceReference"
+						},
+						"secretName": "SQLServerKeyNiran"
+					}
+				},
+				"connectVia": {
+					"referenceName": "IROnPrem",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/ls_OnPrem_Dyn_TName')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
@@ -90,6 +186,35 @@
 				"connectVia": {
 					"referenceName": "IROnPrem",
 					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ls_SQLTable')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDatabase",
+				"typeProperties": {
+					"server": "[parameters('ls_SQLTable_properties_typeProperties_server')]",
+					"database": "[parameters('ls_SQLTable_properties_typeProperties_database')]",
+					"encrypt": "mandatory",
+					"trustServerCertificate": true,
+					"authenticationType": "SQL",
+					"userName": "[parameters('ls_SQLTable_properties_typeProperties_userName')]",
+					"password": {
+						"type": "AzureKeyVaultSecret",
+						"store": {
+							"referenceName": "AzureKeyVault2",
+							"type": "LinkedServiceReference"
+						},
+						"secretName": "NiranSQLKey"
+					},
+					"alwaysEncryptedSettings": {
+						"alwaysEncryptedAkvAuthType": "ManagedIdentity"
+					}
 				}
 			},
 			"dependsOn": []
@@ -1009,139 +1134,8 @@
 					"table": "DEPT"
 				}
 			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/ds_OnPremTable')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "ls_OnPremTable",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "SqlServerTable",
-				"schema": [],
-				"typeProperties": {
-					"schema": "dbo",
-					"table": "CompTrans"
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/ds_OnPrem_Dy_TName')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "ls_OnPrem_Dyn_TName",
-					"type": "LinkedServiceReference"
-				},
-				"parameters": {
-					"TableName": {
-						"type": "string"
-					}
-				},
-				"annotations": [],
-				"type": "SqlServerTable",
-				"schema": [],
-				"typeProperties": {
-					"schema": "dbo",
-					"table": {
-						"value": "@dataset().TableName",
-						"type": "Expression"
-					}
-				}
-			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/ls_OnPrem_Dyn_TName')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/ds_TempTable')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "ls_TempTable",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [
-					{
-						"name": "Order_Number",
-						"type": "bigint",
-						"precision": 19
-					},
-					{
-						"name": "Customer_Key",
-						"type": "bigint",
-						"precision": 19
-					},
-					{
-						"name": "Order_Sequence_No",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "Channel",
-						"type": "varchar"
-					},
-					{
-						"name": "Order_Date",
-						"type": "varchar"
-					},
-					{
-						"name": "Hour_of_Day",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "Region",
-						"type": "varchar"
-					},
-					{
-						"name": "Brand_Key",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "Category",
-						"type": "varchar"
-					},
-					{
-						"name": "Units",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "RRP_Revenue",
-						"type": "decimal",
-						"precision": 10,
-						"scale": 2
-					},
-					{
-						"name": "Revenue",
-						"type": "decimal",
-						"precision": 10,
-						"scale": 2
-					},
-					{
-						"name": "Total_Discount",
-						"type": "int",
-						"precision": 10
-					}
-				],
-				"typeProperties": {
-					"schema": "dbo",
-					"table": "TransactionsDataOLAP"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/ls_TempTable')]"
+				"[concat(variables('factoryId'), '/linkedServices/ls_OnPremSQLServer')]"
 			]
 		}
 	]

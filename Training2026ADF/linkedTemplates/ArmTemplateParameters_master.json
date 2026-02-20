@@ -8,6 +8,9 @@
 		"AzureDataLakeStorage1_accountKey": {
 			"value": ""
 		},
+		"ds_TransformedData_accountKey": {
+			"value": ""
+		},
 		"ls_ADLS_accountKey": {
 			"value": ""
 		},
@@ -43,6 +46,9 @@
 		},
 		"AzureKeyVault2_properties_typeProperties_baseUrl": {
 			"value": "https://AzSQLKey.vault.azure.net/"
+		},
+		"ds_TransformedData_properties_typeProperties_url": {
+			"value": "https://azadlsstorageaccount.dfs.core.windows.net/"
 		},
 		"ls_ADLS_properties_typeProperties_url": {
 			"value": "https://azadlsstorageaccount.dfs.core.windows.net/"
@@ -133,6 +139,15 @@
 		},
 		"ls_Ref_IF_Copy_properties_typeProperties_url": {
 			"value": "https://azadlsstorageaccount.dfs.core.windows.net/"
+		},
+		"ls_SQLTable_properties_typeProperties_server": {
+			"value": "historical.database.windows.net"
+		},
+		"ls_SQLTable_properties_typeProperties_database": {
+			"value": "TempData"
+		},
+		"ls_SQLTable_properties_typeProperties_userName": {
+			"value": "Niran"
 		},
 		"ls_TempTable_properties_typeProperties_server": {
 			"value": "historical.database.windows.net"
