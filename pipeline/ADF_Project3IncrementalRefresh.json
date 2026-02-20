@@ -27,8 +27,7 @@
 					},
 					"fieldList": [
 						"exists",
-						"structure",
-						"columnCount"
+						"structure"
 					]
 				}
 			},
@@ -57,6 +56,23 @@
 							"userProperties": [],
 							"typeProperties": {
 								"waitTimeInSeconds": 5
+							}
+						},
+						{
+							"name": "No file found",
+							"type": "Fail",
+							"dependsOn": [
+								{
+									"activity": "Wait1",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
+								"message": "No file found",
+								"errorCode": "Retry"
 							}
 						}
 					]
@@ -179,8 +195,7 @@
 						"structure"
 					],
 					"storeSettings": {
-						"type": "AzureBlobStorageReadSettings",
-						"recursive": true,
+						"type": "AzureBlobFSReadSettings",
 						"enablePartitionDiscovery": false
 					},
 					"formatSettings": {
