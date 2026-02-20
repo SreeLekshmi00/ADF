@@ -903,7 +903,7 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobFSLocation",
-						"fileName": "FinalData",
+						"fileName": "FinalData.csv",
 						"folderPath": "TransformedData",
 						"fileSystem": "adlscontainer"
 					},
