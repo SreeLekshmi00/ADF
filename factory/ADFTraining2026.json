@@ -1,0 +1,9 @@
+{
+	"name": "ADFTraining2026",
+	"location": "uksouth",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "b684e6ef-31c1-4590-88d2-f96c7c400c75",
+		"tenantId": "771a8113-f7b7-4237-81d9-e297fd0a1ce4"
+	}
+}
