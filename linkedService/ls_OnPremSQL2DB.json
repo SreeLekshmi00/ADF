@@ -19,10 +19,6 @@
 				},
 				"secretName": "SQLServerSree"
 			}
-		},
-		"connectVia": {
-			"referenceName": "IROnPrem",
-			"type": "IntegrationRuntimeReference"
 		}
 	}
 }

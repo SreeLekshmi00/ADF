@@ -18,10 +18,6 @@
 				},
 				"secretName": "SQLServerKeyNiran"
 			}
-		},
-		"connectVia": {
-			"referenceName": "IROnPrem",
-			"type": "IntegrationRuntimeReference"
 		}
 	}
 }

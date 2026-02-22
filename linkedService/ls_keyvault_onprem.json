@@ -22,10 +22,6 @@
 			"alwaysEncryptedSettings": {
 				"alwaysEncryptedAkvAuthType": "ManagedIdentity"
 			}
-		},
-		"connectVia": {
-			"referenceName": "IROnPrem",
-			"type": "IntegrationRuntimeReference"
 		}
 	}
 }

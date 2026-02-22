@@ -12,10 +12,6 @@
 			"authenticationType": "SQL",
 			"userName": "Sree",
 			"encryptedCredential": "eyJDcmVkZW50aWFsSWQiOiIxZDFjZTYzMy05MGJjLTQ4NzQtYTZlMi1lNTQxOTc4NzUyNDAiLCJWZXJzaW9uIjoiMi4wIiwiQ2xhc3NUeXBlIjoiTWljcm9zb2Z0LkRhdGFQcm94eS5Db3JlLkludGVyU2VydmljZURhdGFDb250cmFjdC5DcmVkZW50aWFsU1UwNkNZMTQifQ=="
-		},
-		"connectVia": {
-			"referenceName": "IROnPrem",
-			"type": "IntegrationRuntimeReference"
 		}
 	}
 }
