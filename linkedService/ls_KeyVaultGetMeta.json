@@ -11,14 +11,17 @@
 			"trustServerCertificate": true,
 			"authenticationType": "SQL",
 			"userName": "Sree",
+			"password": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "AzureKeyVault1",
+					"type": "LinkedServiceReference"
+				},
+				"secretName": "SQLServerSree"
+			},
 			"alwaysEncryptedSettings": {
 				"alwaysEncryptedAkvAuthType": "ManagedIdentity"
-			},
-			"encryptedCredential": "eyJDcmVkZW50aWFsSWQiOiI0MTJmZGNiYy0wMWFkLTQ0MjYtOGU1MS0zNThkODM1NWE0M2QiLCJWZXJzaW9uIjoiMi4wIiwiQ2xhc3NUeXBlIjoiTWljcm9zb2Z0LkRhdGFQcm94eS5Db3JlLkludGVyU2VydmljZURhdGFDb250cmFjdC5DcmVkZW50aWFsU1UwNkNZMTQifQ=="
-		},
-		"connectVia": {
-			"referenceName": "IROnPrem",
-			"type": "IntegrationRuntimeReference"
+			}
 		}
 	}
 }

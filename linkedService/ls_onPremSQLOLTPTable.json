@@ -1,6 +1,5 @@
 {
 	"name": "ls_onPremSQLOLTPTable",
-	"type": "Microsoft.DataFactory/factories/linkedservices",
 	"properties": {
 		"annotations": [],
 		"type": "SqlServer",
@@ -11,14 +10,17 @@
 			"trustServerCertificate": true,
 			"authenticationType": "SQL",
 			"userName": "Niran",
+			"password": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "AzureKeyVault1",
+					"type": "LinkedServiceReference"
+				},
+				"secretName": "SQLServerKeyNiran"
+			},
 			"alwaysEncryptedSettings": {
 				"alwaysEncryptedAkvAuthType": "ManagedIdentity"
-			},
-			"encryptedCredential": "eyJDcmVkZW50aWFsSWQiOiI2MmFjYzJiMi1iZDlmLTQzMjQtOGVhMS0yOGNkMDBjOGI4MjMiLCJWZXJzaW9uIjoiMi4wIiwiQ2xhc3NUeXBlIjoiTWljcm9zb2Z0LkRhdGFQcm94eS5Db3JlLkludGVyU2VydmljZURhdGFDb250cmFjdC5DcmVkZW50aWFsU1UwNkNZMTQifQ=="
-		},
-		"connectVia": {
-			"referenceName": "IROnPrem",
-			"type": "IntegrationRuntimeReference"
+			}
 		}
 	}
 }
