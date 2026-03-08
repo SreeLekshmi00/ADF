@@ -1,0 +1,23 @@
+{
+	"name": "ds_SQL_Bronze_Input",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_SQL_Bronze_Input",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "Customers",
+				"fileSystem": "bronze"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}
