@@ -4,7 +4,7 @@
 		"annotations": [],
 		"type": "HttpServer",
 		"typeProperties": {
-			"url": "https://docs.google.com/spreadsheets/d/1BS94oCWlEqZVbW3mT5AVwTrK‑gCYoI5i5WyrYoxsh_A/export",
+			"url": "https://docs.google.com/spreadsheets/d/1BS94oCWlEqZVbW3mT5AVwTrK-gCYoI5i5WyrYoxsh_A/",
 			"enableServerCertificateValidation": true,
 			"authenticationType": "Anonymous"
 		}
