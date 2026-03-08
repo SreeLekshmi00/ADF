@@ -14,6 +14,9 @@
 		"ls_ADLS2DB_accountKey": {
 			"value": ""
 		},
+		"ls_CSV2Parq_accountKey": {
+			"value": ""
+		},
 		"ls_Drive_Bronze_input_accountKey": {
 			"value": ""
 		},
@@ -47,7 +50,13 @@
 		"ls_OnPrem_Dyn_TName_password": {
 			"value": ""
 		},
+		"ls_Parq_accountKey": {
+			"value": ""
+		},
 		"ls_Ref_IF_Copy_accountKey": {
+			"value": ""
+		},
+		"ls_SQL_Bronze_Input_accountKey": {
 			"value": ""
 		},
 		"ls_keyvault_onprem_password": {
@@ -62,6 +71,9 @@
 		"AzureKeyVault2_properties_typeProperties_baseUrl": {
 			"value": "https://AzSQLKey.vault.azure.net/"
 		},
+		"SQL_ServerKey_properties_typeProperties_baseUrl": {
+			"value": "https://KeyVaults007.vault.azure.net/"
+		},
 		"ds_TransformedData_properties_typeProperties_url": {
 			"value": "https://azadlsstorageaccount.dfs.core.windows.net/"
 		},
@@ -70,6 +82,9 @@
 		},
 		"ls_ADLS2DB_properties_typeProperties_url": {
 			"value": "https://azadlsstorageaccount.dfs.core.windows.net/"
+		},
+		"ls_CSV2Parq_properties_typeProperties_url": {
+			"value": "https://azadlsstorageac.dfs.core.windows.net/"
 		},
 		"ls_Drive_Bronze_input_properties_typeProperties_url": {
 			"value": "https://azadlsstorageac.dfs.core.windows.net/"
@@ -110,6 +125,15 @@
 		"ls_OnPremLookUp_properties_typeProperties_userName": {
 			"value": "Sree"
 		},
+		"ls_OnPremSQL_properties_typeProperties_server": {
+			"value": "FALCON"
+		},
+		"ls_OnPremSQL_properties_typeProperties_database": {
+			"value": "LearnSQL"
+		},
+		"ls_OnPremSQL_properties_typeProperties_userName": {
+			"value": "Niran"
+		},
 		"ls_OnPremSQL2DB_properties_typeProperties_server": {
 			"value": "FALCON"
 		},
@@ -146,6 +170,9 @@
 		"ls_OnPrem_Dyn_TName_properties_typeProperties_userName": {
 			"value": "Niran"
 		},
+		"ls_Parq_properties_typeProperties_url": {
+			"value": "https://azadlsstorageac.dfs.core.windows.net/"
+		},
 		"ls_Ref_IF_Copy_properties_typeProperties_url": {
 			"value": "https://azadlsstorageaccount.dfs.core.windows.net/"
 		},
@@ -157,6 +184,9 @@
 		},
 		"ls_SQLTable_properties_typeProperties_userName": {
 			"value": "Niran"
+		},
+		"ls_SQL_Bronze_Input_properties_typeProperties_url": {
+			"value": "https://azadlsstorageac.dfs.core.windows.net/"
 		},
 		"ls_TempTable_properties_typeProperties_server": {
 			"value": "historical.database.windows.net"

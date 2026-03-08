@@ -19,6 +19,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'ls_ADLS2DB'"
 		},
+		"ls_CSV2Parq_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'ls_CSV2Parq'"
+		},
 		"ls_Drive_Bronze_input_accountKey": {
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'ls_Drive_Bronze_input'"
@@ -47,9 +51,17 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'password' of 'ls_OnPrem_Dyn_TName'"
 		},
+		"ls_Parq_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'ls_Parq'"
+		},
 		"ls_Ref_IF_Copy_accountKey": {
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'ls_Ref_IF_Copy'"
+		},
+		"ls_SQL_Bronze_Input_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'ls_SQL_Bronze_Input'"
 		},
 		"ls_onPremSQLOLTPTable_password": {
 			"type": "secureString",
@@ -63,6 +75,10 @@
 			"type": "string",
 			"defaultValue": "https://AzSQLKey.vault.azure.net/"
 		},
+		"SQL_ServerKey_properties_typeProperties_baseUrl": {
+			"type": "string",
+			"defaultValue": "https://KeyVaults007.vault.azure.net/"
+		},
 		"ds_TransformedData_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://azadlsstorageaccount.dfs.core.windows.net/"
@@ -74,6 +90,10 @@
 		"ls_ADLS2DB_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://azadlsstorageaccount.dfs.core.windows.net/"
+		},
+		"ls_CSV2Parq_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://azadlsstorageac.dfs.core.windows.net/"
 		},
 		"ls_Drive_Bronze_input_properties_typeProperties_url": {
 			"type": "string",
@@ -127,9 +147,17 @@
 			"type": "string",
 			"defaultValue": "Niran"
 		},
+		"ls_Parq_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://azadlsstorageac.dfs.core.windows.net/"
+		},
 		"ls_Ref_IF_Copy_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://azadlsstorageaccount.dfs.core.windows.net/"
+		},
+		"ls_SQL_Bronze_Input_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://azadlsstorageac.dfs.core.windows.net/"
 		},
 		"ls_WebTable_properties_typeProperties_url": {
 			"type": "string",
@@ -174,6 +202,19 @@
 				"type": "AzureKeyVault",
 				"typeProperties": {
 					"baseUrl": "[parameters('AzureKeyVault2_properties_typeProperties_baseUrl')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/SQL_ServerKey')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureKeyVault",
+				"typeProperties": {
+					"baseUrl": "[parameters('SQL_ServerKey_properties_typeProperties_baseUrl')]"
 				}
 			},
 			"dependsOn": []
@@ -224,6 +265,23 @@
 					"accountKey": {
 						"type": "SecureString",
 						"value": "[parameters('ls_ADLS2DB_accountKey')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ls_CSV2Parq')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"url": "[parameters('ls_CSV2Parq_properties_typeProperties_url')]",
+					"accountKey": {
+						"type": "SecureString",
+						"value": "[parameters('ls_CSV2Parq_accountKey')]"
 					}
 				}
 			},
@@ -364,6 +422,23 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/ls_Parq')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"url": "[parameters('ls_Parq_properties_typeProperties_url')]",
+					"accountKey": {
+						"type": "SecureString",
+						"value": "[parameters('ls_Parq_accountKey')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/ls_Ref_IF_Copy')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
@@ -375,6 +450,23 @@
 					"accountKey": {
 						"type": "SecureString",
 						"value": "[parameters('ls_Ref_IF_Copy_accountKey')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ls_SQL_Bronze_Input')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"url": "[parameters('ls_SQL_Bronze_Input_properties_typeProperties_url')]",
+					"accountKey": {
+						"type": "SecureString",
+						"value": "[parameters('ls_SQL_Bronze_Input_accountKey')]"
 					}
 				}
 			},
@@ -431,194 +523,6 @@
 				}
 			},
 			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/ds_ADLS2DB')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "ls_ADLS2DB",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "DelimitedText",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobFSLocation",
-						"folderPath": "input",
-						"fileSystem": "adlscontainer"
-					},
-					"columnDelimiter": ",",
-					"escapeChar": "\\",
-					"firstRowAsHeader": false,
-					"quoteChar": "\""
-				},
-				"schema": [
-					{
-						"type": "String"
-					},
-					{
-						"type": "String"
-					},
-					{
-						"type": "String"
-					},
-					{
-						"type": "String"
-					},
-					{
-						"type": "String"
-					},
-					{
-						"type": "String"
-					},
-					{
-						"type": "String"
-					},
-					{
-						"type": "String"
-					},
-					{
-						"type": "String"
-					},
-					{
-						"type": "String"
-					},
-					{
-						"type": "String"
-					},
-					{
-						"type": "String"
-					},
-					{
-						"type": "String"
-					},
-					{
-						"type": "String"
-					},
-					{
-						"type": "String"
-					}
-				]
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/ls_ADLS2DB')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/ds_BackUp')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "ls_EmpPar",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "DelimitedText",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobFSLocation",
-						"folderPath": "output",
-						"fileSystem": "adlscontainer"
-					},
-					"columnDelimiter": ",",
-					"escapeChar": "\\",
-					"firstRowAsHeader": true,
-					"quoteChar": "\""
-				},
-				"schema": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/ls_EmpPar')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/ds_CSVInput')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "ls_ADLS",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "DelimitedText",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobFSLocation",
-						"fileName": "employee_data_windows.csv",
-						"folderPath": "input",
-						"fileSystem": "adlscontainer"
-					},
-					"columnDelimiter": ",",
-					"escapeChar": "\\",
-					"firstRowAsHeader": true,
-					"quoteChar": "\""
-				},
-				"schema": [
-					{
-						"name": "ID",
-						"type": "String"
-					},
-					{
-						"name": "Name",
-						"type": "String"
-					},
-					{
-						"name": "Department",
-						"type": "String"
-					},
-					{
-						"name": "Joining_Date",
-						"type": "String"
-					},
-					{
-						"name": "Salary",
-						"type": "String"
-					},
-					{
-						"name": "Bonus",
-						"type": "String"
-					},
-					{
-						"name": "Location",
-						"type": "String"
-					}
-				]
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/ls_ADLS')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/ds_Drive_Bronze_input')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "ls_Drive_Bronze_input",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "DelimitedText",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobFSLocation",
-						"fileName": "Orders",
-						"fileSystem": "bronze"
-					},
-					"columnDelimiter": ",",
-					"escapeChar": "\\",
-					"firstRowAsHeader": true,
-					"quoteChar": "\""
-				},
-				"schema": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/ls_Drive_Bronze_input')]"
-			]
 		}
 	]
 }

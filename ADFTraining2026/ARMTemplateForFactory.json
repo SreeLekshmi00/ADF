@@ -19,6 +19,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'ls_ADLS2DB'"
 		},
+		"ls_CSV2Parq_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'ls_CSV2Parq'"
+		},
 		"ls_Drive_Bronze_input_accountKey": {
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'ls_Drive_Bronze_input'"
@@ -63,9 +67,17 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'password' of 'ls_OnPrem_Dyn_TName'"
 		},
+		"ls_Parq_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'ls_Parq'"
+		},
 		"ls_Ref_IF_Copy_accountKey": {
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'ls_Ref_IF_Copy'"
+		},
+		"ls_SQL_Bronze_Input_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'ls_SQL_Bronze_Input'"
 		},
 		"ls_keyvault_onprem_password": {
 			"type": "secureString",
@@ -83,6 +95,10 @@
 			"type": "string",
 			"defaultValue": "https://AzSQLKey.vault.azure.net/"
 		},
+		"SQL_ServerKey_properties_typeProperties_baseUrl": {
+			"type": "string",
+			"defaultValue": "https://KeyVaults007.vault.azure.net/"
+		},
 		"ds_TransformedData_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://azadlsstorageaccount.dfs.core.windows.net/"
@@ -94,6 +110,10 @@
 		"ls_ADLS2DB_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://azadlsstorageaccount.dfs.core.windows.net/"
+		},
+		"ls_CSV2Parq_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://azadlsstorageac.dfs.core.windows.net/"
 		},
 		"ls_Drive_Bronze_input_properties_typeProperties_url": {
 			"type": "string",
@@ -147,6 +167,18 @@
 			"type": "string",
 			"defaultValue": "Sree"
 		},
+		"ls_OnPremSQL_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "FALCON"
+		},
+		"ls_OnPremSQL_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "LearnSQL"
+		},
+		"ls_OnPremSQL_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "Niran"
+		},
 		"ls_OnPremSQL2DB_properties_typeProperties_server": {
 			"type": "string",
 			"defaultValue": "FALCON"
@@ -195,6 +227,10 @@
 			"type": "string",
 			"defaultValue": "Niran"
 		},
+		"ls_Parq_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://azadlsstorageac.dfs.core.windows.net/"
+		},
 		"ls_Ref_IF_Copy_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://azadlsstorageaccount.dfs.core.windows.net/"
@@ -210,6 +246,10 @@
 		"ls_SQLTable_properties_typeProperties_userName": {
 			"type": "string",
 			"defaultValue": "Niran"
+		},
+		"ls_SQL_Bronze_Input_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://azadlsstorageac.dfs.core.windows.net/"
 		},
 		"ls_TempTable_properties_typeProperties_server": {
 			"type": "string",
@@ -325,6 +365,132 @@
 								"parameters": {}
 							}
 						]
+					},
+					{
+						"name": "OnPrem",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "SqlServerSource",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"sink": {
+								"type": "DelimitedTextSink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings"
+								},
+								"formatSettings": {
+									"type": "DelimitedTextWriteSettings",
+									"quoteAllText": true,
+									"fileExtension": ".csv"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "ds_OnPremSQL",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "ds_SQL_Bronze_Input",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					},
+					{
+						"name": "CSV2Parquet",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "GoogleDriveFile",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							},
+							{
+								"activity": "OnPrem",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": true,
+									"wildcardFileName": "*",
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							},
+							"sink": {
+								"type": "ParquetSink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings"
+								},
+								"formatSettings": {
+									"type": "ParquetWriteSettings"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "ds_2Parq",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "ds_Parq",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
 					}
 				],
 				"policy": {
@@ -335,7 +501,75 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/ds_WebTable')]",
-				"[concat(variables('factoryId'), '/datasets/ds_Drive_Bronze_input')]"
+				"[concat(variables('factoryId'), '/datasets/ds_Drive_Bronze_input')]",
+				"[concat(variables('factoryId'), '/datasets/ds_OnPremSQL')]",
+				"[concat(variables('factoryId'), '/datasets/ds_SQL_Bronze_Input')]",
+				"[concat(variables('factoryId'), '/datasets/ds_2Parq')]",
+				"[concat(variables('factoryId'), '/datasets/ds_Parq')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_2Parq')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_CSV2Parq",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileSystem": "bronze"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "customer_id",
+						"type": "String"
+					},
+					{
+						"name": "customer_name",
+						"type": "String"
+					},
+					{
+						"name": "email",
+						"type": "String"
+					},
+					{
+						"name": "phone",
+						"type": "String"
+					},
+					{
+						"name": "address",
+						"type": "String"
+					},
+					{
+						"name": "city",
+						"type": "String"
+					},
+					{
+						"name": "state",
+						"type": "String"
+					},
+					{
+						"name": "zip_code",
+						"type": "String"
+					},
+					{
+						"name": "country",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_CSV2Parq')]"
 			]
 		},
 		{
@@ -1448,6 +1682,66 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/ds_OnPremSQL')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_OnPremSQL",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "SqlServerTable",
+				"schema": [
+					{
+						"name": "customer_id",
+						"type": "tinyint",
+						"precision": 3
+					},
+					{
+						"name": "customer_name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "email",
+						"type": "nvarchar"
+					},
+					{
+						"name": "phone",
+						"type": "nvarchar"
+					},
+					{
+						"name": "address",
+						"type": "nvarchar"
+					},
+					{
+						"name": "city",
+						"type": "nvarchar"
+					},
+					{
+						"name": "state",
+						"type": "nvarchar"
+					},
+					{
+						"name": "zip_code",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "country",
+						"type": "nvarchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "Customers"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_OnPremSQL')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/ds_OnPremSQL2DB')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -1637,6 +1931,30 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/ls_OnPrem_Dyn_TName')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_Parq')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_Parq",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileSystem": "bronze"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_Parq')]"
 			]
 		},
 		{
@@ -1929,6 +2247,34 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/ls_SQLTable')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_SQL_Bronze_Input')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_SQL_Bronze_Input",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "Customers",
+						"fileSystem": "bronze"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_SQL_Bronze_Input')]"
 			]
 		},
 		{
@@ -2306,6 +2652,19 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/SQL_ServerKey')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureKeyVault",
+				"typeProperties": {
+					"baseUrl": "[parameters('SQL_ServerKey_properties_typeProperties_baseUrl')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/ds_TransformedData')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
@@ -2351,6 +2710,23 @@
 					"accountKey": {
 						"type": "SecureString",
 						"value": "[parameters('ls_ADLS2DB_accountKey')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ls_CSV2Parq')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"url": "[parameters('ls_CSV2Parq_properties_typeProperties_url')]",
+					"accountKey": {
+						"type": "SecureString",
+						"value": "[parameters('ls_CSV2Parq_accountKey')]"
 					}
 				}
 			},
@@ -2509,6 +2885,39 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/ls_OnPremSQL')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "SqlServer",
+				"typeProperties": {
+					"server": "[parameters('ls_OnPremSQL_properties_typeProperties_server')]",
+					"database": "[parameters('ls_OnPremSQL_properties_typeProperties_database')]",
+					"encrypt": "mandatory",
+					"trustServerCertificate": true,
+					"authenticationType": "SQL",
+					"userName": "[parameters('ls_OnPremSQL_properties_typeProperties_userName')]",
+					"password": {
+						"type": "AzureKeyVaultSecret",
+						"store": {
+							"referenceName": "SQL_ServerKey",
+							"type": "LinkedServiceReference"
+						},
+						"secretName": "SQLNiran"
+					}
+				},
+				"connectVia": {
+					"referenceName": "OnPremIRDatabricks",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/integrationRuntimes/OnPremIRDatabricks')]",
+				"[concat(variables('factoryId'), '/linkedServices/SQL_ServerKey')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/ls_OnPremSQL2DB')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
@@ -2609,6 +3018,23 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/ls_Parq')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"url": "[parameters('ls_Parq_properties_typeProperties_url')]",
+					"accountKey": {
+						"type": "SecureString",
+						"value": "[parameters('ls_Parq_accountKey')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/ls_Ref_IF_Copy')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
@@ -2655,6 +3081,23 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/AzureKeyVault2')]"
 			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ls_SQL_Bronze_Input')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"url": "[parameters('ls_SQL_Bronze_Input_properties_typeProperties_url')]",
+					"accountKey": {
+						"type": "SecureString",
+						"value": "[parameters('ls_SQL_Bronze_Input_accountKey')]"
+					}
+				}
+			},
+			"dependsOn": []
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/ls_TempTable')]",
@@ -2791,6 +3234,16 @@
 				"typeProperties": {
 					"selfContainedInteractiveAuthoringEnabled": true
 				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/OnPremIRDatabricks')]",
+			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "SelfHosted",
+				"typeProperties": {}
 			},
 			"dependsOn": []
 		},
