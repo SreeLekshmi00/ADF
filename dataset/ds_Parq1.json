@@ -1,8 +1,8 @@
 {
-	"name": "ds_2Parq",
+	"name": "ds_Parq1",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "ls_CSV2Parq",
+			"referenceName": "ls_Parq",
 			"type": "LinkedServiceReference"
 		},
 		"annotations": [],
@@ -10,7 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "Customers",
+				"fileName": "Orders",
 				"fileSystem": "bronze"
 			},
 			"columnDelimiter": ",",
@@ -20,39 +20,31 @@
 		},
 		"schema": [
 			{
+				"name": "order_id",
+				"type": "String"
+			},
+			{
 				"name": "customer_id",
 				"type": "String"
 			},
 			{
-				"name": "customer_name",
+				"name": "product",
 				"type": "String"
 			},
 			{
-				"name": "email",
+				"name": "quantity",
 				"type": "String"
 			},
 			{
-				"name": "phone",
+				"name": "order_date",
 				"type": "String"
 			},
 			{
-				"name": "address",
+				"name": "order_status",
 				"type": "String"
 			},
 			{
-				"name": "city",
-				"type": "String"
-			},
-			{
-				"name": "state",
-				"type": "String"
-			},
-			{
-				"name": "zip_code",
-				"type": "String"
-			},
-			{
-				"name": "country",
+				"name": "total_amount",
 				"type": "String"
 			}
 		]
