@@ -1,0 +1,22 @@
+{
+	"name": "ds_WebTable",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_WebTable",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "HttpServerLocation",
+				"relativeUrl": "export?exportFormat=csv"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}
