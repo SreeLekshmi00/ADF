@@ -1,0 +1,6 @@
+{
+	"name": "OnPremIRDatabricks",
+	"properties": {
+		"type": "SelfHosted"
+	}
+}
