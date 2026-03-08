@@ -71,6 +71,9 @@
 		"AzureKeyVault2_properties_typeProperties_baseUrl": {
 			"value": "https://AzSQLKey.vault.azure.net/"
 		},
+		"Databricks_Access_properties_typeProperties_baseUrl": {
+			"value": "https://KeyVaults007.vault.azure.net/"
+		},
 		"SQL_ServerKey_properties_typeProperties_baseUrl": {
 			"value": "https://KeyVaults007.vault.azure.net/"
 		},
@@ -85,6 +88,9 @@
 		},
 		"ls_CSV2Parq_properties_typeProperties_url": {
 			"value": "https://azadlsstorageac.dfs.core.windows.net/"
+		},
+		"ls_DataBricksPro_properties_typeProperties_existingClusterId": {
+			"value": "0223-031402-69btrukg"
 		},
 		"ls_Drive_Bronze_input_properties_typeProperties_url": {
 			"value": "https://azadlsstorageac.dfs.core.windows.net/"

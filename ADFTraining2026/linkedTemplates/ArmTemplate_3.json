@@ -7,9 +7,53 @@
 			"metadata": "Data Factory name",
 			"defaultValue": "ADFTraining2026"
 		},
+		"ls_OnPremSQL2DB_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'ls_OnPremSQL2DB'"
+		},
+		"ls_OnPremTable_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'ls_OnPremTable'"
+		},
 		"ls_keyvault_onprem_password": {
 			"type": "secureString",
 			"metadata": "Secure string for 'password' of 'ls_keyvault_onprem'"
+		},
+		"ls_OnPremSQL2DB_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "FALCON"
+		},
+		"ls_OnPremSQL2DB_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "LearnSQL"
+		},
+		"ls_OnPremSQL2DB_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "Sree"
+		},
+		"ls_OnPremTable_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "FALCON"
+		},
+		"ls_OnPremTable_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "LearnSQL"
+		},
+		"ls_OnPremTable_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "Niran"
+		},
+		"ls_SQLTable_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "historical.database.windows.net"
+		},
+		"ls_SQLTable_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "TempData"
+		},
+		"ls_SQLTable_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "Niran"
 		},
 		"ls_TempTable_properties_typeProperties_server": {
 			"type": "string",
@@ -44,6 +88,87 @@
 		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
 	},
 	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/ls_OnPremSQL2DB')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "SqlServer",
+				"typeProperties": {
+					"server": "[parameters('ls_OnPremSQL2DB_properties_typeProperties_server')]",
+					"database": "[parameters('ls_OnPremSQL2DB_properties_typeProperties_database')]",
+					"encrypt": "mandatory",
+					"trustServerCertificate": true,
+					"authenticationType": "SQL",
+					"userName": "[parameters('ls_OnPremSQL2DB_properties_typeProperties_userName')]",
+					"password": {
+						"type": "SecureString",
+						"value": "[parameters('ls_OnPremSQL2DB_password')]"
+					}
+				},
+				"connectVia": {
+					"referenceName": "IROnPrem",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ls_OnPremTable')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "SqlServer",
+				"typeProperties": {
+					"server": "[parameters('ls_OnPremTable_properties_typeProperties_server')]",
+					"database": "[parameters('ls_OnPremTable_properties_typeProperties_database')]",
+					"encrypt": "mandatory",
+					"trustServerCertificate": true,
+					"authenticationType": "SQL",
+					"userName": "[parameters('ls_OnPremTable_properties_typeProperties_userName')]",
+					"password": {
+						"type": "SecureString",
+						"value": "[parameters('ls_OnPremTable_password')]"
+					}
+				},
+				"connectVia": {
+					"referenceName": "IROnPrem",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ls_SQLTable')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDatabase",
+				"typeProperties": {
+					"server": "[parameters('ls_SQLTable_properties_typeProperties_server')]",
+					"database": "[parameters('ls_SQLTable_properties_typeProperties_database')]",
+					"encrypt": "mandatory",
+					"trustServerCertificate": true,
+					"authenticationType": "SQL",
+					"userName": "[parameters('ls_SQLTable_properties_typeProperties_userName')]",
+					"password": {
+						"type": "AzureKeyVaultSecret",
+						"store": {
+							"referenceName": "AzureKeyVault2",
+							"type": "LinkedServiceReference"
+						},
+						"secretName": "NiranSQLKey"
+					},
+					"alwaysEncryptedSettings": {
+						"alwaysEncryptedAkvAuthType": "ManagedIdentity"
+					}
+				}
+			},
+			"dependsOn": []
+		},
 		{
 			"name": "[concat(parameters('factoryName'), '/ls_TempTable')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
@@ -250,7 +375,9 @@
 				"schema": [],
 				"typeProperties": {}
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_OnPremSQL2DB')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/ds_OnPremTable')]",
@@ -269,7 +396,9 @@
 					"table": "CompTrans"
 				}
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_OnPremTable')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/ds_SQLTable')]",
@@ -350,7 +479,9 @@
 					"table": "TransactionsDataOLAP"
 				}
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_SQLTable')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/ds_TempTable')]",
@@ -808,7 +939,66 @@
 								"dependencyConditions": [
 									"Succeeded"
 								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
 							},
+							"sink": {
+								"type": "ParquetSink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings"
+								},
+								"formatSettings": {
+									"type": "ParquetWriteSettings"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "ds_Parq1",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "ds_Parq",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					},
+					{
+						"name": "CSV2Parquet_1",
+						"type": "Copy",
+						"dependsOn": [
 							{
 								"activity": "OnPrem",
 								"dependencyConditions": [
@@ -830,7 +1020,6 @@
 								"storeSettings": {
 									"type": "AzureBlobFSReadSettings",
 									"recursive": true,
-									"wildcardFileName": "*",
 									"enablePartitionDiscovery": false
 								},
 								"formatSettings": {
@@ -870,6 +1059,44 @@
 								"parameters": {}
 							}
 						]
+					},
+					{
+						"name": "MinorTransformation",
+						"type": "DatabricksNotebook",
+						"dependsOn": [
+							{
+								"activity": "CSV2Parquet_1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							},
+							{
+								"activity": "CSV2Parquet",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"notebookPath": "/Workspace_Sree/Project1/silver",
+							"baseParameters": {
+								"file_name1": "Orders.parquet",
+								"file_name2": "Customers.parquet",
+								"file_type": "parquet"
+							}
+						},
+						"linkedServiceName": {
+							"referenceName": "ls_DataBricksPro",
+							"type": "LinkedServiceReference"
+						}
 					}
 				],
 				"policy": {

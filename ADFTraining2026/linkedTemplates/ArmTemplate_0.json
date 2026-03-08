@@ -75,6 +75,10 @@
 			"type": "string",
 			"defaultValue": "https://AzSQLKey.vault.azure.net/"
 		},
+		"Databricks_Access_properties_typeProperties_baseUrl": {
+			"type": "string",
+			"defaultValue": "https://KeyVaults007.vault.azure.net/"
+		},
 		"SQL_ServerKey_properties_typeProperties_baseUrl": {
 			"type": "string",
 			"defaultValue": "https://KeyVaults007.vault.azure.net/"
@@ -202,6 +206,19 @@
 				"type": "AzureKeyVault",
 				"typeProperties": {
 					"baseUrl": "[parameters('AzureKeyVault2_properties_typeProperties_baseUrl')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Databricks_Access')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureKeyVault",
+				"typeProperties": {
+					"baseUrl": "[parameters('Databricks_Access_properties_typeProperties_baseUrl')]"
 				}
 			},
 			"dependsOn": []
@@ -508,18 +525,6 @@
 					"alwaysEncryptedSettings": {
 						"alwaysEncryptedAkvAuthType": "ManagedIdentity"
 					}
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/IROnPrem')]",
-			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"type": "SelfHosted",
-				"typeProperties": {
-					"selfContainedInteractiveAuthoringEnabled": true
 				}
 			},
 			"dependsOn": []

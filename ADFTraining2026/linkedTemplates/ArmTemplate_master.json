@@ -95,6 +95,10 @@
 			"type": "string",
 			"defaultValue": "https://AzSQLKey.vault.azure.net/"
 		},
+		"Databricks_Access_properties_typeProperties_baseUrl": {
+			"type": "string",
+			"defaultValue": "https://KeyVaults007.vault.azure.net/"
+		},
 		"SQL_ServerKey_properties_typeProperties_baseUrl": {
 			"type": "string",
 			"defaultValue": "https://KeyVaults007.vault.azure.net/"
@@ -114,6 +118,10 @@
 		"ls_CSV2Parq_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://azadlsstorageac.dfs.core.windows.net/"
+		},
+		"ls_DataBricksPro_properties_typeProperties_existingClusterId": {
+			"type": "string",
+			"defaultValue": "0223-031402-69btrukg"
 		},
 		"ls_Drive_Bronze_input_properties_typeProperties_url": {
 			"type": "string",
@@ -373,6 +381,9 @@
 					"AzureKeyVault2_properties_typeProperties_baseUrl": {
 						"value": "[parameters('AzureKeyVault2_properties_typeProperties_baseUrl')]"
 					},
+					"Databricks_Access_properties_typeProperties_baseUrl": {
+						"value": "[parameters('Databricks_Access_properties_typeProperties_baseUrl')]"
+					},
 					"SQL_ServerKey_properties_typeProperties_baseUrl": {
 						"value": "[parameters('SQL_ServerKey_properties_typeProperties_baseUrl')]"
 					},
@@ -492,11 +503,8 @@
 					"ls_KeyVaultGetMeta_password": {
 						"value": "[parameters('ls_KeyVaultGetMeta_password')]"
 					},
-					"ls_OnPremSQL2DB_password": {
-						"value": "[parameters('ls_OnPremSQL2DB_password')]"
-					},
-					"ls_OnPremTable_password": {
-						"value": "[parameters('ls_OnPremTable_password')]"
+					"ls_DataBricksPro_properties_typeProperties_existingClusterId": {
+						"value": "[parameters('ls_DataBricksPro_properties_typeProperties_existingClusterId')]"
 					},
 					"ls_KeyVaultCopyFromOnPrem_properties_typeProperties_server": {
 						"value": "[parameters('ls_KeyVaultCopyFromOnPrem_properties_typeProperties_server')]"
@@ -524,6 +532,35 @@
 					},
 					"ls_OnPremSQL_properties_typeProperties_userName": {
 						"value": "[parameters('ls_OnPremSQL_properties_typeProperties_userName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'ADFTraining2026_ArmTemplate_1')]"
+			]
+		},
+		{
+			"name": "ADFTraining2026_ArmTemplate_3",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2024-03-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_3.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"ls_OnPremSQL2DB_password": {
+						"value": "[parameters('ls_OnPremSQL2DB_password')]"
+					},
+					"ls_OnPremTable_password": {
+						"value": "[parameters('ls_OnPremTable_password')]"
+					},
+					"ls_keyvault_onprem_password": {
+						"value": "[parameters('ls_keyvault_onprem_password')]"
 					},
 					"ls_OnPremSQL2DB_properties_typeProperties_server": {
 						"value": "[parameters('ls_OnPremSQL2DB_properties_typeProperties_server')]"
@@ -551,29 +588,6 @@
 					},
 					"ls_SQLTable_properties_typeProperties_userName": {
 						"value": "[parameters('ls_SQLTable_properties_typeProperties_userName')]"
-					}
-				}
-			},
-			"dependsOn": [
-				"[resourceId('Microsoft.Resources/deployments', 'ADFTraining2026_ArmTemplate_1')]"
-			]
-		},
-		{
-			"name": "ADFTraining2026_ArmTemplate_3",
-			"type": "Microsoft.Resources/deployments",
-			"apiVersion": "2024-03-01",
-			"properties": {
-				"mode": "incremental",
-				"templateLink": {
-					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_3.json', parameters('containerSasToken'))]",
-					"contentVersion": "1.0.0.0"
-				},
-				"parameters": {
-					"factoryName": {
-						"value": "[parameters('factoryName')]"
-					},
-					"ls_keyvault_onprem_password": {
-						"value": "[parameters('ls_keyvault_onprem_password')]"
 					},
 					"ls_TempTable_properties_typeProperties_server": {
 						"value": "[parameters('ls_TempTable_properties_typeProperties_server')]"
