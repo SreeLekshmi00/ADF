@@ -1,0 +1,10 @@
+{
+	"name": "Databricks_Access",
+	"properties": {
+		"annotations": [],
+		"type": "AzureKeyVault",
+		"typeProperties": {
+			"baseUrl": "https://KeyVaults007.vault.azure.net/"
+		}
+	}
+}
