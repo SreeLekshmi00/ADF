@@ -1,6 +1,5 @@
 {
 	"name": "ls_OnPremSQL",
-	"type": "Microsoft.DataFactory/factories/linkedservices",
 	"properties": {
 		"annotations": [],
 		"type": "SqlServer",
@@ -11,11 +10,19 @@
 			"trustServerCertificate": true,
 			"authenticationType": "SQL",
 			"userName": "Niran",
-			"encryptedCredential": "eyJDcmVkZW50aWFsSWQiOiIzMjg4YTJmMC00NTg1LTRkZjMtYWRhOS1iZWNiNzQ5NTgwNzciLCJWZXJzaW9uIjoiMi4wIiwiQ2xhc3NUeXBlIjoiTWljcm9zb2Z0LkRhdGFQcm94eS5Db3JlLkludGVyU2VydmljZURhdGFDb250cmFjdC5DcmVkZW50aWFsU1UwNkNZMTQifQ=="
+			"password": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "SQL_ServerKey",
+					"type": "LinkedServiceReference"
+				},
+				"secretName": "SQLNiran"
+			}
 		},
 		"connectVia": {
-			"referenceName": "IROnPrem",
+			"referenceName": "OnPremIRDatabricks",
 			"type": "IntegrationRuntimeReference"
 		}
-	}
+	},
+	"type": "Microsoft.DataFactory/factories/linkedservices"
 }
