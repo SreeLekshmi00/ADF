@@ -1,0 +1,536 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "ADFTraining2026"
+		},
+		"ds_TransformedData_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'ds_TransformedData'"
+		},
+		"ls_ADLS_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'ls_ADLS'"
+		},
+		"ls_ADLS2DB_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'ls_ADLS2DB'"
+		},
+		"ls_Drive_Bronze_input_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'ls_Drive_Bronze_input'"
+		},
+		"ls_EmpPar_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'ls_EmpPar'"
+		},
+		"ls_KeyVaultCopyFromOnPrem_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'ls_KeyVaultCopyFromOnPrem'"
+		},
+		"ls_KeyVaultGetMeta_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'ls_KeyVaultGetMeta'"
+		},
+		"ls_KeyVaultNewFile2DF_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'ls_KeyVaultNewFile2DF'"
+		},
+		"ls_OnPrem2ADLS_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'ls_OnPrem2ADLS'"
+		},
+		"ls_OnPremLookUp_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'ls_OnPremLookUp'"
+		},
+		"ls_OnPremSQL2DB_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'ls_OnPremSQL2DB'"
+		},
+		"ls_OnPremSQLServer_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'ls_OnPremSQLServer'"
+		},
+		"ls_OnPremTable_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'ls_OnPremTable'"
+		},
+		"ls_OnPrem_Dyn_TName_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'ls_OnPrem_Dyn_TName'"
+		},
+		"ls_Ref_IF_Copy_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'ls_Ref_IF_Copy'"
+		},
+		"ls_keyvault_onprem_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'ls_keyvault_onprem'"
+		},
+		"ls_onPremSQLOLTPTable_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'ls_onPremSQLOLTPTable'"
+		},
+		"AzureKeyVault1_properties_typeProperties_baseUrl": {
+			"type": "string",
+			"defaultValue": "https://KeyValut00.vault.azure.net/"
+		},
+		"AzureKeyVault2_properties_typeProperties_baseUrl": {
+			"type": "string",
+			"defaultValue": "https://AzSQLKey.vault.azure.net/"
+		},
+		"ds_TransformedData_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://azadlsstorageaccount.dfs.core.windows.net/"
+		},
+		"ls_ADLS_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://azadlsstorageaccount.dfs.core.windows.net/"
+		},
+		"ls_ADLS2DB_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://azadlsstorageaccount.dfs.core.windows.net/"
+		},
+		"ls_Drive_Bronze_input_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://azadlsstorageac.dfs.core.windows.net/"
+		},
+		"ls_EmpPar_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://azadlsstorageaccount.dfs.core.windows.net/"
+		},
+		"ls_KeyVaultCopyFromOnPrem_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "FALCON"
+		},
+		"ls_KeyVaultCopyFromOnPrem_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "LearnSQL"
+		},
+		"ls_KeyVaultCopyFromOnPrem_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "Sree"
+		},
+		"ls_KeyVaultGetMeta_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "FALCON"
+		},
+		"ls_KeyVaultGetMeta_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "LearnSQL"
+		},
+		"ls_KeyVaultGetMeta_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "Sree"
+		},
+		"ls_KeyVaultNewFile2DF_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://azadlsstorageaccount.dfs.core.windows.net/"
+		},
+		"ls_OnPrem2ADLS_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://azadlsstorageaccount.dfs.core.windows.net/"
+		},
+		"ls_OnPremLookUp_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "FALCON"
+		},
+		"ls_OnPremLookUp_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "LearnSQL"
+		},
+		"ls_OnPremLookUp_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "Sree"
+		},
+		"ls_OnPremSQL2DB_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "FALCON"
+		},
+		"ls_OnPremSQL2DB_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "LearnSQL"
+		},
+		"ls_OnPremSQL2DB_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "Sree"
+		},
+		"ls_OnPremSQLServer_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "FALCON"
+		},
+		"ls_OnPremSQLServer_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "LearnSQL"
+		},
+		"ls_OnPremSQLServer_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "Sree"
+		},
+		"ls_OnPremTable_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "FALCON"
+		},
+		"ls_OnPremTable_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "LearnSQL"
+		},
+		"ls_OnPremTable_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "Niran"
+		},
+		"ls_OnPrem_Dyn_TName_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "FALCON"
+		},
+		"ls_OnPrem_Dyn_TName_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "LearnSQL"
+		},
+		"ls_OnPrem_Dyn_TName_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "Niran"
+		},
+		"ls_Ref_IF_Copy_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://azadlsstorageaccount.dfs.core.windows.net/"
+		},
+		"ls_SQLTable_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "historical.database.windows.net"
+		},
+		"ls_SQLTable_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "TempData"
+		},
+		"ls_SQLTable_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "Niran"
+		},
+		"ls_TempTable_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "historical.database.windows.net"
+		},
+		"ls_TempTable_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "TempData"
+		},
+		"ls_TempTable_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "Niran"
+		},
+		"ls_WebTable_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://docs.google.com/spreadsheets/d/1BS94oCWlEqZVbW3mT5AVwTrK-gCYoI5i5WyrYoxsh_A/"
+		},
+		"ls_adb_csv_properties_typeProperties_existingClusterId": {
+			"type": "string",
+			"defaultValue": "0209-025758-ausnyyzo"
+		},
+		"ls_keyvault_onprem_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "FALCON"
+		},
+		"ls_keyvault_onprem_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "LearnSQL"
+		},
+		"ls_keyvault_onprem_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "Sree"
+		},
+		"ls_onPremSQLOLTPTable_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "FALCON"
+		},
+		"ls_onPremSQLOLTPTable_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "LearnSQL"
+		},
+		"ls_onPremSQLOLTPTable_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "Niran"
+		},
+		"containerUri": {
+			"type": "string",
+			"metadata": "URI to storage account containing linked ARM templates"
+		},
+		"containerSasToken": {
+			"type": "string",
+			"metadata": "Sas token to storage account containing linked ARM templates"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "ADFTraining2026_ArmTemplate_0",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2024-03-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_0.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"ds_TransformedData_accountKey": {
+						"value": "[parameters('ds_TransformedData_accountKey')]"
+					},
+					"ls_ADLS_accountKey": {
+						"value": "[parameters('ls_ADLS_accountKey')]"
+					},
+					"ls_ADLS2DB_accountKey": {
+						"value": "[parameters('ls_ADLS2DB_accountKey')]"
+					},
+					"ls_Drive_Bronze_input_accountKey": {
+						"value": "[parameters('ls_Drive_Bronze_input_accountKey')]"
+					},
+					"ls_EmpPar_accountKey": {
+						"value": "[parameters('ls_EmpPar_accountKey')]"
+					},
+					"ls_KeyVaultNewFile2DF_accountKey": {
+						"value": "[parameters('ls_KeyVaultNewFile2DF_accountKey')]"
+					},
+					"ls_OnPrem2ADLS_accountKey": {
+						"value": "[parameters('ls_OnPrem2ADLS_accountKey')]"
+					},
+					"ls_OnPremLookUp_password": {
+						"value": "[parameters('ls_OnPremLookUp_password')]"
+					},
+					"ls_OnPremSQLServer_password": {
+						"value": "[parameters('ls_OnPremSQLServer_password')]"
+					},
+					"ls_OnPrem_Dyn_TName_password": {
+						"value": "[parameters('ls_OnPrem_Dyn_TName_password')]"
+					},
+					"ls_Ref_IF_Copy_accountKey": {
+						"value": "[parameters('ls_Ref_IF_Copy_accountKey')]"
+					},
+					"ls_onPremSQLOLTPTable_password": {
+						"value": "[parameters('ls_onPremSQLOLTPTable_password')]"
+					},
+					"AzureKeyVault1_properties_typeProperties_baseUrl": {
+						"value": "[parameters('AzureKeyVault1_properties_typeProperties_baseUrl')]"
+					},
+					"AzureKeyVault2_properties_typeProperties_baseUrl": {
+						"value": "[parameters('AzureKeyVault2_properties_typeProperties_baseUrl')]"
+					},
+					"ds_TransformedData_properties_typeProperties_url": {
+						"value": "[parameters('ds_TransformedData_properties_typeProperties_url')]"
+					},
+					"ls_ADLS_properties_typeProperties_url": {
+						"value": "[parameters('ls_ADLS_properties_typeProperties_url')]"
+					},
+					"ls_ADLS2DB_properties_typeProperties_url": {
+						"value": "[parameters('ls_ADLS2DB_properties_typeProperties_url')]"
+					},
+					"ls_Drive_Bronze_input_properties_typeProperties_url": {
+						"value": "[parameters('ls_Drive_Bronze_input_properties_typeProperties_url')]"
+					},
+					"ls_EmpPar_properties_typeProperties_url": {
+						"value": "[parameters('ls_EmpPar_properties_typeProperties_url')]"
+					},
+					"ls_KeyVaultNewFile2DF_properties_typeProperties_url": {
+						"value": "[parameters('ls_KeyVaultNewFile2DF_properties_typeProperties_url')]"
+					},
+					"ls_OnPrem2ADLS_properties_typeProperties_url": {
+						"value": "[parameters('ls_OnPrem2ADLS_properties_typeProperties_url')]"
+					},
+					"ls_OnPremLookUp_properties_typeProperties_server": {
+						"value": "[parameters('ls_OnPremLookUp_properties_typeProperties_server')]"
+					},
+					"ls_OnPremLookUp_properties_typeProperties_database": {
+						"value": "[parameters('ls_OnPremLookUp_properties_typeProperties_database')]"
+					},
+					"ls_OnPremLookUp_properties_typeProperties_userName": {
+						"value": "[parameters('ls_OnPremLookUp_properties_typeProperties_userName')]"
+					},
+					"ls_OnPremSQLServer_properties_typeProperties_server": {
+						"value": "[parameters('ls_OnPremSQLServer_properties_typeProperties_server')]"
+					},
+					"ls_OnPremSQLServer_properties_typeProperties_database": {
+						"value": "[parameters('ls_OnPremSQLServer_properties_typeProperties_database')]"
+					},
+					"ls_OnPremSQLServer_properties_typeProperties_userName": {
+						"value": "[parameters('ls_OnPremSQLServer_properties_typeProperties_userName')]"
+					},
+					"ls_OnPrem_Dyn_TName_properties_typeProperties_server": {
+						"value": "[parameters('ls_OnPrem_Dyn_TName_properties_typeProperties_server')]"
+					},
+					"ls_OnPrem_Dyn_TName_properties_typeProperties_database": {
+						"value": "[parameters('ls_OnPrem_Dyn_TName_properties_typeProperties_database')]"
+					},
+					"ls_OnPrem_Dyn_TName_properties_typeProperties_userName": {
+						"value": "[parameters('ls_OnPrem_Dyn_TName_properties_typeProperties_userName')]"
+					},
+					"ls_Ref_IF_Copy_properties_typeProperties_url": {
+						"value": "[parameters('ls_Ref_IF_Copy_properties_typeProperties_url')]"
+					},
+					"ls_WebTable_properties_typeProperties_url": {
+						"value": "[parameters('ls_WebTable_properties_typeProperties_url')]"
+					},
+					"ls_onPremSQLOLTPTable_properties_typeProperties_server": {
+						"value": "[parameters('ls_onPremSQLOLTPTable_properties_typeProperties_server')]"
+					},
+					"ls_onPremSQLOLTPTable_properties_typeProperties_database": {
+						"value": "[parameters('ls_onPremSQLOLTPTable_properties_typeProperties_database')]"
+					},
+					"ls_onPremSQLOLTPTable_properties_typeProperties_userName": {
+						"value": "[parameters('ls_onPremSQLOLTPTable_properties_typeProperties_userName')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "ADFTraining2026_ArmTemplate_1",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2024-03-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_1.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'ADFTraining2026_ArmTemplate_0')]"
+			]
+		},
+		{
+			"name": "ADFTraining2026_ArmTemplate_2",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2024-03-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_2.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"ls_KeyVaultCopyFromOnPrem_password": {
+						"value": "[parameters('ls_KeyVaultCopyFromOnPrem_password')]"
+					},
+					"ls_KeyVaultGetMeta_password": {
+						"value": "[parameters('ls_KeyVaultGetMeta_password')]"
+					},
+					"ls_OnPremSQL2DB_password": {
+						"value": "[parameters('ls_OnPremSQL2DB_password')]"
+					},
+					"ls_OnPremTable_password": {
+						"value": "[parameters('ls_OnPremTable_password')]"
+					},
+					"ls_keyvault_onprem_password": {
+						"value": "[parameters('ls_keyvault_onprem_password')]"
+					},
+					"ls_KeyVaultCopyFromOnPrem_properties_typeProperties_server": {
+						"value": "[parameters('ls_KeyVaultCopyFromOnPrem_properties_typeProperties_server')]"
+					},
+					"ls_KeyVaultCopyFromOnPrem_properties_typeProperties_database": {
+						"value": "[parameters('ls_KeyVaultCopyFromOnPrem_properties_typeProperties_database')]"
+					},
+					"ls_KeyVaultCopyFromOnPrem_properties_typeProperties_userName": {
+						"value": "[parameters('ls_KeyVaultCopyFromOnPrem_properties_typeProperties_userName')]"
+					},
+					"ls_KeyVaultGetMeta_properties_typeProperties_server": {
+						"value": "[parameters('ls_KeyVaultGetMeta_properties_typeProperties_server')]"
+					},
+					"ls_KeyVaultGetMeta_properties_typeProperties_database": {
+						"value": "[parameters('ls_KeyVaultGetMeta_properties_typeProperties_database')]"
+					},
+					"ls_KeyVaultGetMeta_properties_typeProperties_userName": {
+						"value": "[parameters('ls_KeyVaultGetMeta_properties_typeProperties_userName')]"
+					},
+					"ls_OnPremSQL2DB_properties_typeProperties_server": {
+						"value": "[parameters('ls_OnPremSQL2DB_properties_typeProperties_server')]"
+					},
+					"ls_OnPremSQL2DB_properties_typeProperties_database": {
+						"value": "[parameters('ls_OnPremSQL2DB_properties_typeProperties_database')]"
+					},
+					"ls_OnPremSQL2DB_properties_typeProperties_userName": {
+						"value": "[parameters('ls_OnPremSQL2DB_properties_typeProperties_userName')]"
+					},
+					"ls_OnPremTable_properties_typeProperties_server": {
+						"value": "[parameters('ls_OnPremTable_properties_typeProperties_server')]"
+					},
+					"ls_OnPremTable_properties_typeProperties_database": {
+						"value": "[parameters('ls_OnPremTable_properties_typeProperties_database')]"
+					},
+					"ls_OnPremTable_properties_typeProperties_userName": {
+						"value": "[parameters('ls_OnPremTable_properties_typeProperties_userName')]"
+					},
+					"ls_SQLTable_properties_typeProperties_server": {
+						"value": "[parameters('ls_SQLTable_properties_typeProperties_server')]"
+					},
+					"ls_SQLTable_properties_typeProperties_database": {
+						"value": "[parameters('ls_SQLTable_properties_typeProperties_database')]"
+					},
+					"ls_SQLTable_properties_typeProperties_userName": {
+						"value": "[parameters('ls_SQLTable_properties_typeProperties_userName')]"
+					},
+					"ls_TempTable_properties_typeProperties_server": {
+						"value": "[parameters('ls_TempTable_properties_typeProperties_server')]"
+					},
+					"ls_TempTable_properties_typeProperties_database": {
+						"value": "[parameters('ls_TempTable_properties_typeProperties_database')]"
+					},
+					"ls_TempTable_properties_typeProperties_userName": {
+						"value": "[parameters('ls_TempTable_properties_typeProperties_userName')]"
+					},
+					"ls_adb_csv_properties_typeProperties_existingClusterId": {
+						"value": "[parameters('ls_adb_csv_properties_typeProperties_existingClusterId')]"
+					},
+					"ls_keyvault_onprem_properties_typeProperties_server": {
+						"value": "[parameters('ls_keyvault_onprem_properties_typeProperties_server')]"
+					},
+					"ls_keyvault_onprem_properties_typeProperties_database": {
+						"value": "[parameters('ls_keyvault_onprem_properties_typeProperties_database')]"
+					},
+					"ls_keyvault_onprem_properties_typeProperties_userName": {
+						"value": "[parameters('ls_keyvault_onprem_properties_typeProperties_userName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'ADFTraining2026_ArmTemplate_1')]"
+			]
+		},
+		{
+			"name": "ADFTraining2026_ArmTemplate_3",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2024-03-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_3.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'ADFTraining2026_ArmTemplate_2')]"
+			]
+		}
+	]
+}
