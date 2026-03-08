@@ -1,10 +1,6 @@
 {
 	"name": "DS_ADLS2SQL",
 	"properties": {
-		"linkedServiceName": {
-			"referenceName": "AzureDataLakeStorage1",
-			"type": "LinkedServiceReference"
-		},
 		"annotations": [],
 		"type": "DelimitedText",
 		"typeProperties": {
